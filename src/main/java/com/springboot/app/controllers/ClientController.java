@@ -5,11 +5,14 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.springboot.app.models.dao.IClientDao;
 import com.springboot.app.models.entity.Client;
+
+import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/client")
@@ -34,7 +37,13 @@ public class ClientController {
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.POST)
-  public String createClient(Client client) {
+  public String createClient(@Valid Client client, BindingResult result, Model model) {
+
+    if (result.hasErrors()) {
+      model.addAttribute("title", "Create Client");
+      return "client/form";
+    }
+
     clientDao.save(client);
     return "redirect:/client/list";
 

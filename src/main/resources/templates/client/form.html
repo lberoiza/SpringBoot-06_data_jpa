@@ -20,30 +20,42 @@
 			<input type="hidden" th:field="*{id}" />
 
 			<div class="form-group row mb-3">
-				<label class="col-sm-2 col-form-label">Name</label>
+				<label class="col-sm-2 col-form-label" for="name">Name</label>
 				<div class="col-sm-6">
-					<input type="text" class="form-control" th:field="*{name}" />
+					<input type="text" id="name" class="form-control"
+						th:field="*{name}" th:errorclass="'alert alert-danger'"  /> <small
+						class="form-text text-danger" th:if="${#fields.hasErrors('name')}"
+						th:errors="*{name}"></small>
 				</div>
 			</div>
 
 			<div class="form-group row mb-3">
-				<label class="col-sm-2 col-form-label">Surname</label>
+				<label class="col-sm-2 col-form-label" for="surname">Surname</label>
 				<div class="col-sm-6">
-					<input type="text" class="form-control" th:field="*{surname}" />
+					<input type="text" id="surname" class="form-control"
+						th:field="*{surname}" th:errorclass="'alert alert-danger'"  />
+					<small class="form-text text-danger"
+						th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></small>
 				</div>
 			</div>
 
 			<div class="form-group row mb-3">
-				<label class="col-sm-2 col-form-label">Email</label>
+				<label class="col-sm-2 col-form-label" for="email">Email</label>
 				<div class="col-sm-6">
-					<input type="email" class="form-control" th:field="*{email}" />
+					<input type="email" id="email" class="form-control"
+						th:field="*{email}" th:errorclass="'alert alert-danger'" /> <small
+						class="form-text text-danger"
+						th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
 				</div>
 			</div>
 
 			<div class="form-group row mb-3">
-				<label class="col-sm-2 col-form-label">Date</label>
+				<label class="col-sm-2 col-form-label" for="date">Date</label>
 				<div class="col-sm-6">
-					<input type="date" class="form-control" th:field="*{createdAt}" />
+					<input type="date" id="date" class="form-control"
+						th:field="*{createdAt}" th:errorclass="'alert alert-danger'" />
+					<small class="form-text text-danger"
+						th:if="${#fields.hasErrors('createdAt')}" th:errors="*{createdAt}"></small>
 				</div>
 			</div>
 
