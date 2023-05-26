@@ -1,0 +1,54 @@
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
+.idea/
+
+# Ignore archivos de construcción y logs de Maven
+target/
+logs/
+.mvn/
+
+# Ignore archivos generados automáticamente
+*.class
+*.log
+*.jar
+*.war
+*.ear
+
+# Ignore archivos de configuración de Spring Boot
+/application.properties
+/application.yml
+
+# Ignore archivos de caché y degradados de Maven
+CACHEDIR.TAG
+dependency-reduced-pom.xml
