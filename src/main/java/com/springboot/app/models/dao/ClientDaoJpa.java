@@ -11,18 +11,23 @@ import com.springboot.app.models.entity.Client;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 
-
 @Primary
 @Repository("ClientDaoJpa")
 public class ClientDaoJpa implements IClientDao {
 
   @PersistenceContext
   private EntityManager em;
-  
+
   @Override
   @Transactional(readOnly = true)
   public List<Client> findAll() {
     return em.createQuery("from Client", Client.class).getResultList();
+  }
+
+  @Override
+  @Transactional
+  public void save(Client client) {
+    em.persist(client);
   }
 
 }
