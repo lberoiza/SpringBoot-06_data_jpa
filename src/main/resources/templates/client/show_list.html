@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title th:text="${title}"></title>
+</head>
+<body>
+	<h3 th:text="${title}"></h3>
+	<table>
+		<thead>
+			<tr>
+				<th>ID</th>
+				<th>Name</th>
+				<th>Surname</th>
+				<th>email</th>
+				<th>Created At</th>
+				<th>Updated At</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="client: ${clients}">
+				<th th:text="${client.id}"></th>
+				<th th:text="${client.name}"></th>
+				<th th:text="${client.surname}"></th>
+				<th th:text="${client.email}"></th>
+				<th th:text="${#dates.format(client.createdAt, 'dd.MM.yyyy')}"></th>
+				<th th:text="${#dates.format(client.updatedAt, 'dd.MM.yyyy')}"></th>
+			</tr>
+		</tbody>
+	</table>
+	
+</body>
+</html>
