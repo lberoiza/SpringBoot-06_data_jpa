@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 
 @Entity
@@ -31,6 +33,17 @@ public class Client implements Serializable {
 
   @Column(name = "updated_at")
   private Date updatedAt;
+
+  @PrePersist
+  public void prePersist() {
+    createdAt = new Date();
+    updatedAt = new Date();
+  }
+
+  @PreUpdate
+  public void preUpdate() {
+    updatedAt = new Date();
+  }
 
   public Long getId() {
     return id;
