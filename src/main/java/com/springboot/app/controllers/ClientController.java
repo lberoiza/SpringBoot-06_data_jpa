@@ -1,13 +1,17 @@
 package com.springboot.app.controllers;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.support.SessionStatus;
 
 import com.springboot.app.models.dao.IClientDao;
 import com.springboot.app.models.entity.Client;
@@ -16,6 +20,7 @@ import jakarta.validation.Valid;
 
 @Controller
 @RequestMapping("/client")
+@SessionAttributes("client")
 public class ClientController {
 
   @Autowired
@@ -37,16 +42,31 @@ public class ClientController {
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.POST)
-  public String createClient(@Valid Client client, BindingResult result, Model model) {
+  public String createClient(@Valid Client client, BindingResult result, Model model, SessionStatus status) {
 
     if (result.hasErrors()) {
       model.addAttribute("title", "Create Client");
       return "client/form";
     }
 
+    System.out.println(client);
     clientDao.save(client);
+    status.setComplete();
     return "redirect:/client/list";
 
+  }
+
+  @RequestMapping(value = "/form/{id}", method = RequestMethod.GET)
+  public String editClient(@PathVariable Long id, Model model) {
+    Optional<Client> result = clientDao.findById(id);
+
+    if (result.isPresent()) {
+      model.addAttribute("client", result.get());
+      model.addAttribute("title", "Edit Client");
+      return "client/form";
+    }
+
+    return "redirect:/client/list";
   }
 
 }

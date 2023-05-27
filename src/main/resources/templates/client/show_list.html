@@ -25,6 +25,7 @@
 					<th>email</th>
 					<th>Created At</th>
 					<th>Updated At</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -35,6 +36,7 @@
 					<td th:text="${client.email}"></td>
 					<td th:text="${#dates.format(client.createdAt, 'dd.MM.yyyy')}"></td>
 					<td th:text="${#dates.format(client.updatedAt, 'dd.MM.yyyy')}"></td>
+					<td><a th:href="@{/client/form/} + ${client.id}" class="btn btn-primary btn-xs">Edit</a></td>
 				</tr>
 			</tbody>
 		</table>

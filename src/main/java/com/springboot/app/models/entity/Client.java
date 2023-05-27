@@ -26,6 +26,12 @@ public class Client implements Serializable {
 
   private static final long serialVersionUID = -7205843364359501687L;
 
+  @Override
+  public String toString() {
+    return "Client [id=" + id + ", name=" + name + ", surname=" + surname + ", email=" + email + ", createdAt="
+        + createdAt + ", updatedAt=" + updatedAt + "]";
+  }
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
