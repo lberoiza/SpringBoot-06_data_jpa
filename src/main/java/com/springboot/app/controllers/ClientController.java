@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
-import com.springboot.app.models.dao.IClientDao;
 import com.springboot.app.models.entity.Client;
+import com.springboot.app.services.IClientService;
 
 import jakarta.validation.Valid;
 
@@ -24,12 +24,12 @@ import jakarta.validation.Valid;
 public class ClientController {
 
   @Autowired
-  private IClientDao clientDao;
+  private IClientService clientService;
 
   @RequestMapping(value = "/list", method = RequestMethod.GET)
   public String getList(Model model) {
     model.addAttribute("title", "Client List");
-    model.addAttribute("clients", clientDao.findAll());
+    model.addAttribute("clients", clientService.findAll());
     return "client/show_list";
 
   }
@@ -50,7 +50,7 @@ public class ClientController {
     }
 
     System.out.println(client);
-    clientDao.save(client);
+    clientService.save(client);
     status.setComplete();
     return "redirect:/client/list";
 
@@ -58,7 +58,7 @@ public class ClientController {
 
   @RequestMapping(value = "/form/{id}", method = RequestMethod.GET)
   public String editClient(@PathVariable Long id, Model model) {
-    Optional<Client> result = clientDao.findById(id);
+    Optional<Client> result = clientService.findById(id);
 
     if (result.isPresent()) {
       model.addAttribute("client", result.get());
@@ -71,7 +71,7 @@ public class ClientController {
 
   @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
   public String editClient(@PathVariable Long id) {
-    clientDao.delete(id);
+    clientService.delete(id);
     return "redirect:/client/list";
   }
 

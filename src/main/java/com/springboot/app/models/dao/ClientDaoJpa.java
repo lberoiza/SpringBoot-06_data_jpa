@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.springboot.app.models.entity.Client;
 
@@ -21,19 +19,16 @@ public class ClientDaoJpa implements IClientDao {
   private EntityManager em;
 
   @Override
-  @Transactional(readOnly = true)
   public List<Client> findAll() {
     return em.createQuery("from Client", Client.class).getResultList();
   }
 
   @Override
-  @Transactional(readOnly = true)
   public Optional<Client> findById(Long id) {
     return Optional.ofNullable(em.find(Client.class, id));
   }
 
   @Override
-  @Transactional
   public void save(Client client) {
     if (client.getId() != null) {
       em.merge(client);
@@ -43,7 +38,6 @@ public class ClientDaoJpa implements IClientDao {
   }
 
   @Override
-  @Transactional
   public void delete(Long id) {
     findById(id).ifPresent(client -> em.remove(client));
   }
