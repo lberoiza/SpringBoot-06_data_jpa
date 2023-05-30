@@ -9,7 +9,7 @@ public interface IClientService {
 
   public List<Client> findAll();
 
-  public void save(Client client);
+  public void saveOrUpdate(Client client);
 
   public Optional<Client> findById(Long id);
 

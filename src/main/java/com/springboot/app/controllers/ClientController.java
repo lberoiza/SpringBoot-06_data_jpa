@@ -49,8 +49,7 @@ public class ClientController {
       return "client/form";
     }
 
-    System.out.println(client);
-    clientService.save(client);
+    clientService.saveOrUpdate(client);
     status.setComplete();
     return "redirect:/client/list";
 

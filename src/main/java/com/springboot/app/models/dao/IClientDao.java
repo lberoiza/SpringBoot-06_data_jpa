@@ -11,6 +11,8 @@ public interface IClientDao {
 
   public void save(Client client);
 
+  public void update(Client client);
+
   public Optional<Client> findById(Long id);
 
   public void delete(Long id);

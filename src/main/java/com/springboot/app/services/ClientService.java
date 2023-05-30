@@ -32,8 +32,12 @@ public class ClientService implements IClientService {
 
   @Override
   @Transactional
-  public void save(Client client) {
-    clientDao.save(client);
+  public void saveOrUpdate(Client client) {
+    if (client.hasValidId()) {
+      clientDao.update(client);
+    } else {
+      clientDao.save(client);
+    }
 
   }
 

@@ -30,11 +30,15 @@ public class ClientDaoJpa implements IClientDao {
 
   @Override
   public void save(Client client) {
-    if (client.getId() != null) {
-      em.merge(client);
-    } else {
-      em.persist(client);
+    em.persist(client);
+  }
+
+  @Override
+  public void update(Client client) {
+    if (!client.hasValidId()) {
+      throw new IllegalStateException(String.format("The User has not a correrct Id: (%s)", client.getId()));
     }
+    em.merge(client);
   }
 
   @Override
