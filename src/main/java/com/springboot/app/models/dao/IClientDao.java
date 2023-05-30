@@ -8,7 +8,11 @@ import com.springboot.app.models.entity.Client;
 public interface IClientDao {
 
   public List<Client> findAll();
+
   public void save(Client client);
+
   public Optional<Client> findById(Long id);
-  
+
+  public void delete(Long id);
+
 }

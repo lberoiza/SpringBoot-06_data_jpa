@@ -27,6 +27,12 @@ public class ClientDaoJpa implements IClientDao {
   }
 
   @Override
+  @Transactional(readOnly = true)
+  public Optional<Client> findById(Long id) {
+    return Optional.ofNullable(em.find(Client.class, id));
+  }
+
+  @Override
   @Transactional
   public void save(Client client) {
     if (client.getId() != null) {
@@ -34,13 +40,12 @@ public class ClientDaoJpa implements IClientDao {
     } else {
       em.persist(client);
     }
-
   }
 
   @Override
-  @Transactional(readOnly = true)
-  public Optional<Client> findById(Long id) {
-    return Optional.ofNullable(em.find(Client.class, id));
+  @Transactional
+  public void delete(Long id) {
+    findById(id).ifPresent(client -> em.remove(client));
   }
 
 }

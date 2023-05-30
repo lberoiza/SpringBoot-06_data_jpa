@@ -69,4 +69,10 @@ public class ClientController {
     return "redirect:/client/list";
   }
 
+  @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+  public String editClient(@PathVariable Long id) {
+    clientDao.delete(id);
+    return "redirect:/client/list";
+  }
+
 }
