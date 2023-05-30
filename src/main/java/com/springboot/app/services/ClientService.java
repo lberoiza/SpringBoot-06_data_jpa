@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springboot.app.models.dao.IClientDao;
+import com.springboot.app.models.dao.IClientDaoCrudRepository;
 import com.springboot.app.models.entity.Client;
 
 @Primary
@@ -15,7 +15,7 @@ import com.springboot.app.models.entity.Client;
 public class ClientService implements IClientService {
 
   @Autowired
-  private IClientDao clientDao;
+  private IClientDaoCrudRepository clientDao;
 
   @Override
   @Transactional(readOnly = true)
@@ -32,12 +32,7 @@ public class ClientService implements IClientService {
   @Override
   @Transactional
   public void saveOrUpdate(Client client) {
-    if (client.hasValidId()) {
-      clientDao.update(client);
-    } else {
-      clientDao.save(client);
-    }
-
+    clientDao.save(client);
   }
 
   @Override
