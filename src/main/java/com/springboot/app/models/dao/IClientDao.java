@@ -15,6 +15,6 @@ public interface IClientDao {
 
   public Optional<Client> findById(Long id);
 
-  public void delete(Long id);
+  public void deleteById(Long id);
 
 }

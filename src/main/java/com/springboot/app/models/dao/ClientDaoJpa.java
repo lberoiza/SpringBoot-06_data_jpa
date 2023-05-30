@@ -42,7 +42,7 @@ public class ClientDaoJpa implements IClientDao {
   }
 
   @Override
-  public void delete(Long id) {
+  public void deleteById(Long id) {
     findById(id).ifPresent(client -> em.remove(client));
   }
 
