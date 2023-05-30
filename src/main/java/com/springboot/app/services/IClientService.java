@@ -1,13 +1,12 @@
 package com.springboot.app.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import com.springboot.app.models.entity.Client;
 
 public interface IClientService {
 
-  public List<Client> findAll();
+  public Iterable<Client> findAll();
 
   public void saveOrUpdate(Client client);
 

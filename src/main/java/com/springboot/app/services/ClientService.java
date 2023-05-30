@@ -1,6 +1,5 @@
 package com.springboot.app.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +19,7 @@ public class ClientService implements IClientService {
 
   @Override
   @Transactional(readOnly = true)
-  public List<Client> findAll() {
+  public Iterable<Client> findAll() {
     return clientDao.findAll();
   }
 

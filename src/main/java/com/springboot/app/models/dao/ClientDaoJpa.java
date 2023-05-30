@@ -1,6 +1,5 @@
 package com.springboot.app.models.dao;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.context.annotation.Primary;
@@ -19,7 +18,7 @@ public class ClientDaoJpa implements IClientDao {
   private EntityManager em;
 
   @Override
-  public List<Client> findAll() {
+  public Iterable<Client> findAll() {
     return em.createQuery("from Client", Client.class).getResultList();
   }
 
@@ -29,16 +28,17 @@ public class ClientDaoJpa implements IClientDao {
   }
 
   @Override
-  public void save(Client client) {
+  public Client save(Client client) {
     em.persist(client);
+    return client;
   }
 
   @Override
-  public void update(Client client) {
+  public Client update(Client client) {
     if (!client.hasValidId()) {
       throw new IllegalStateException(String.format("The User has not a correrct Id: (%s)", client.getId()));
     }
-    em.merge(client);
+    return em.merge(client);
   }
 
   @Override

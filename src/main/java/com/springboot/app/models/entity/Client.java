@@ -67,11 +67,10 @@ public class Client implements Serializable {
     updatedAt = new Date();
   }
 
-
   public boolean hasValidId() {
     return getId() != null && getId() > 0;
   }
-  
+
   public Long getId() {
     return id;
   }
