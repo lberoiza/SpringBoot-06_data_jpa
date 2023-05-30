@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<title th:text="${error}"></title>
+</head>
+<body>
+  <h3 th:text="${error}"></h3>
+  <section class="error-details">
+    <div class="error-detail-group">
+      <span>Message: </span><span class="error" th:text="${message}"></span>
+    </div>
+    <div class="error-detail-group">
+      <span>Status Code: </span><span class="error" th:text="${status}"></span>
+    </div>
+    <div class="error-detail-group">
+      <span>Timestamp: </span><span class="error" th:text="${timestamp}"></span>
+    </div>
+  </section>
+
+</body>
+</html>

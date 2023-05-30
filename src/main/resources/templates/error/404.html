@@ -1,0 +1,27 @@
+
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head>
+<meta charset="UTF-8">
+<title>Error 404</title>
+</head>
+<body>
+  <h3>Error 404 - Url Not found</h3>
+  <section class="error-details">
+    <div class="error-detail-group">
+      <span>Error: </span><span class="error" th:text="${error}"></span>
+    </div>
+    <div class="error-detail-group">
+      <span>Status Code: </span><span class="error" th:text="${status}"></span>
+    </div>
+    <div class="error-detail-group">
+      <span>Timestamp: </span><span class="error" th:text="${timestamp}"></span>
+    </div>
+    <hr />
+    <div class="error-detail-group">
+      <p>Path: </p><p class="error" th:text="${path}"></p>
+    </div>
+  </section>
+
+</body>
+</html>
