@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:fragment="head">
+	<meta charset="UTF-8">
+	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+	<title th:text="'Spring Boot, Thymeleaf and JPA - ' + ${title}"></title>
+</head>
+<body>
+	<header th:fragment="header">
+		<div th:replace="~{/components/nav_bar :: NavBar}"></div>
+	</header>
+
+
+	<footer th:fragment="header">
+		<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+	</footer>
+</body>
+
+</html>

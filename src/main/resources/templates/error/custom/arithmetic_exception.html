@@ -1,22 +1,28 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/">
-<head>
-<meta charset="UTF-8">
-<title th:text="${error}"></title>
+<head th:replace="~{/layouts/main :: head}">
 </head>
 <body>
-  <h3 th:text="${error}"></h3>
-  <section class="error-details">
-    <div class="error-detail-group">
-      <span>Message: </span><span class="error" th:text="${message}"></span>
-    </div>
-    <div class="error-detail-group">
-      <span>Status Code: </span><span class="error" th:text="${status}"></span>
-    </div>
-    <div class="error-detail-group">
-      <span>Timestamp: </span><span class="error" th:text="${timestamp}"></span>
-    </div>
-  </section>
 
+	<header th:replace="~{/layouts/main :: header}"></header>
+
+	<div class="container py-4">
+
+		<h3 th:text="${error}"></h3>
+		<section class="error-details">
+			<div class="error-detail-group">
+				<span>Message: </span><span class="error" th:text="${message}"></span>
+			</div>
+			<div class="error-detail-group">
+				<span>Status Code: </span><span class="error" th:text="${status}"></span>
+			</div>
+			<div class="error-detail-group">
+				<span>Timestamp: </span><span class="error" th:text="${timestamp}"></span>
+			</div>
+		</section>
+
+	</div>
+
+	<footer th:replace="~{/layouts/main :: footer}"></footer>
 </body>
-</html>
+</

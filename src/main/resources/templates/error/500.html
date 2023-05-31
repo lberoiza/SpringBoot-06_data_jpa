@@ -1,29 +1,36 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org/">
-<head>
-<meta charset="UTF-8">
-<title>Error 500</title>
+<head th:replace="~{/layouts/main :: head}">
 </head>
 <body>
-  <h3>Error 500</h3>
-  <section class="error-details">
-    <div class="error-detail-group">
-      <span>Error: </span><span class="error" th:text="${error}"></span>
-    </div>
-    <div class="error-detail-group">
-      <span>Message: </span><span class="error" th:text="${message}"></span>
-    </div>
-    <div class="error-detail-group">
-      <span>Status Code: </span><span class="error" th:text="${status}"></span>
-    </div>
-    <div class="error-detail-group">
-      <span>Timestamp: </span><span class="error" th:text="${timestamp}"></span>
-    </div>
-    <hr />
-    <div class="error-detail-group">
-      <p>Stacktrace: </p><p class="error" th:text="${trace}"></p>
-    </div>
-  </section>
 
+	<header th:replace="~{/layouts/main :: header}"></header>
+
+	<div class="container py-4">
+
+		<h3>Error 500</h3>
+		<section class="error-details">
+			<div class="error-detail-group">
+				<span>Error: </span><span class="error" th:text="${error}"></span>
+			</div>
+			<div class="error-detail-group">
+				<span>Message: </span><span class="error" th:text="${message}"></span>
+			</div>
+			<div class="error-detail-group">
+				<span>Status Code: </span><span class="error" th:text="${status}"></span>
+			</div>
+			<div class="error-detail-group">
+				<span>Timestamp: </span><span class="error" th:text="${timestamp}"></span>
+			</div>
+			<hr />
+			<div class="error-detail-group">
+				<p>Stacktrace:</p>
+				<p class="error" th:text="${trace}"></p>
+			</div>
+		</section>
+
+	</div>
+
+	<footer th:replace="~{/layouts/main :: footer}"></footer>
 </body>
 </html>
