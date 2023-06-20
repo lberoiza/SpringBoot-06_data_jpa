@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<nav th:fragment="paginator">
+	<ul class="pagination">
+
+
+		<li><span th:if="${pageRender.isFirst}">First</span> <a
+			th:if="${not pageRender.isFirst}"
+			th:href="@{${pageRender.url}(page=0)}">First</a></li>
+
+		<li><span th:if="${not pageRender.hasPrevious}">Previous</span> <a
+			th:if="${pageRender.hasPrevious}"
+			th:href="@{${pageRender.url}(page=${pageRender.currentPage -2}) }">Previous</a>
+		</li>
+
+
+		<li th:each="item : ${pageRender.pages}"><span
+			th:if="${item.currentPage}" th:text="${item.pageNumber}"></span> <a
+			th:if="${not item.currentPage}"
+			th:href="@{ ${pageRender.url} (page=${item.pageNumber - 1}) }"
+			th:text="${item.pageNumber}"></a></li>
+
+
+		<li><span th:if="${not pageRender.hasNext}">Next</span> <a
+			th:if="${pageRender.hasNext}"
+			th:href="@{${pageRender.url} (page=${pageRender.currentPage}) }">Next</a></li>
+
+
+		<li><span th:if="${pageRender.isLast}">Last</span> <a
+			th:if="${not pageRender.isLast}"
+			th:href="@{ ${pageRender.url}(page=${pageRender.totalPages})}">Last</a></li>
+
+	</ul>
+</nav>
+</body>
+
+</html>
+
