@@ -28,7 +28,7 @@
 
 		<li><span th:if="${pageRender.isLast}">Last</span> <a
 			th:if="${not pageRender.isLast}"
-			th:href="@{ ${pageRender.url}(page=${pageRender.totalPages})}">Last</a></li>
+			th:href="@{ ${pageRender.url}(page=${pageRender.totalPages -1})}">Last</a></li>
 
 	</ul>
 </nav>
