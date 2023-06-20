@@ -4,10 +4,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.springboot.app.models.dao.IClientDaoCrudRepository;
+import com.springboot.app.models.dao.IClientDaoRepository;
 import com.springboot.app.models.entity.Client;
 
 @Primary
@@ -15,7 +17,7 @@ import com.springboot.app.models.entity.Client;
 public class ClientService implements IClientService {
 
   @Autowired
-  private IClientDaoCrudRepository clientDao;
+  private IClientDaoRepository clientDao;
 
   @Override
   @Transactional(readOnly = true)
@@ -40,6 +42,11 @@ public class ClientService implements IClientService {
   public void delete(Long id) {
     clientDao.deleteById(id);
 
+  }
+
+  @Override
+  public Page<Client> findAll(Pageable pageable) {
+    return clientDao.findAll(pageable);
   }
 
 }
