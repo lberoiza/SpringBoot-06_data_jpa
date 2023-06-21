@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -22,6 +23,7 @@ public class FileUploaderService implements IUploadFileService {
 
   private void initializeImageRootPath(String imageDir){
     this.rootPathImages = Paths.get(imageDir);
+    createDirIfNotExists(this.rootPathImages.toFile());
   }
 
   @Override
@@ -32,6 +34,16 @@ public class FileUploaderService implements IUploadFileService {
   @Override
   public Path getRootPathImages() {
     return rootPathImages;
+  }
+
+
+  private void createDirIfNotExists(File dir) {
+    if (!dir.exists()) {
+      if (!dir.mkdirs()) {
+        String dirStr = dir.getAbsolutePath();
+        throw new IllegalStateException(String.format("The Folder '%s' was not created.", dirStr));
+      }
+    }
   }
 
   private void uploadFile(MultipartFile file, String rootPath) {

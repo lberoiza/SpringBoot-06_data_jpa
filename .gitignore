@@ -52,3 +52,6 @@ logs/
 # Ignore archivos de caché y degradados de Maven
 CACHEDIR.TAG
 dependency-reduced-pom.xml
+
+## Ignore Images Directory
+src/main/resources/static/images
