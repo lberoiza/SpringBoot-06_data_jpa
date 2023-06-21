@@ -68,7 +68,7 @@ public class ClientController {
       uploadFileService.uploadImage(image);
       client.setImage(imageName);
       String successStr = String.format("The Image '%s' was successfully uploaded", imageName);
-      flash.addFlashAttribute("success", successStr);
+      flash.addFlashAttribute("info", successStr);
     }catch(IllegalArgumentException ex) {
       model.addAttribute("error", ex.getMessage());
     }
