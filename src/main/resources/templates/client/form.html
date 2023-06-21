@@ -4,75 +4,82 @@
 </head>
 <body>
 
-	<header th:replace="~{/layouts/main :: header}"></header>
+<header th:replace="~{/layouts/main :: header}"></header>
 
-	<div class="container py-4">
-		<div class="card bg-light">
-			<div class="card-header text-primary" th:text="${title}"></div>
-			<div class="card-body">
+<div class="container py-4">
+  <div class="card bg-light">
+    <div class="card-header text-primary" th:text="${title}"></div>
+    <div class="card-body">
 
-				<h4 class="card-title">
-					<a class="btn btn-success" th:href="@{/client/list}">Go back</a>
-				</h4>
+      <h4 class="card-title">
+        <a class="btn btn-success" th:href="@{/client/list}">Go back</a>
+      </h4>
 
 
-				<div th:insert="~{/components/error_block :: ErrorBlock}"
-					th:object="${client}" th:remove="tag"></div>
-				<form th:action="@{/client/form}" th:object="${client}"
-					method="POST">
+      <div th:insert="~{/components/error_block :: ErrorBlock}"
+           th:object="${client}" th:remove="tag"></div>
+      <form th:action="@{/client/form}" th:object="${client}"
+            method="POST" enctype="multipart/form-data">
 
-					<div class="form-group row mb-3">
-						<label class="col-sm-2 col-form-label" for="name">Name</label>
-						<div class="col-sm-6">
-							<input type="text" id="name" class="form-control"
-								th:field="*{name}" th:errorclass="'is-invalid'" /> <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
-						</div>
-					</div>
+        <div class="form-group row mb-3">
+          <label class="col-sm-2 col-form-label" for="name">Name</label>
+          <div class="col-sm-6">
+            <input type="text" id="name" class="form-control"
+                   th:field="*{name}" th:errorclass="'is-invalid'"/> <small
+              class="form-text text-danger"
+              th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></small>
+          </div>
+        </div>
 
-					<div class="form-group row mb-3">
-						<label class="col-sm-2 col-form-label" for="surname">Surname</label>
-						<div class="col-sm-6">
-							<input type="text" id="surname" class="form-control"
-								th:field="*{surname}" th:errorclass="'is-invalid'" /> <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></small>
-						</div>
-					</div>
+        <div class="form-group row mb-3">
+          <label class="col-sm-2 col-form-label" for="surname">Surname</label>
+          <div class="col-sm-6">
+            <input type="text" id="surname" class="form-control"
+                   th:field="*{surname}" th:errorclass="'is-invalid'"/> <small
+              class="form-text text-danger"
+              th:if="${#fields.hasErrors('surname')}" th:errors="*{surname}"></small>
+          </div>
+        </div>
 
-					<div class="form-group row mb-3">
-						<label class="col-sm-2 col-form-label" for="email">Email</label>
-						<div class="col-sm-6">
-							<input type="email" id="email" class="form-control"
-								th:field="*{email}" th:errorclass="'is-invalid'" /> <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
-						</div>
-					</div>
+        <div class="form-group row mb-3">
+          <label class="col-sm-2 col-form-label" for="email">Email</label>
+          <div class="col-sm-6">
+            <input type="email" id="email" class="form-control"
+                   th:field="*{email}" th:errorclass="'is-invalid'"/> <small
+              class="form-text text-danger"
+              th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>
+          </div>
+        </div>
 
-					<div class="form-group row mb-3">
-						<label class="col-sm-2 col-form-label" for="date">Date</label>
-						<div class="col-sm-6">
-							<input type="date" id="date" class="form-control"
-								th:field="*{createdAt}" th:errorclass="'is-invalid'" /> <small
-								class="form-text text-danger"
-								th:if="${#fields.hasErrors('createdAt')}"
-								th:errors="*{createdAt}"></small>
-						</div>
-					</div>
+        <div class="form-group row mb-3">
+          <label class="col-sm-2 col-form-label" for="date">Date</label>
+          <div class="col-sm-6">
+            <input type="date" id="date" class="form-control"
+                   th:field="*{createdAt}" th:errorclass="'is-invalid'"/> <small
+              class="form-text text-danger"
+              th:if="${#fields.hasErrors('createdAt')}"
+              th:errors="*{createdAt}"></small>
+          </div>
+        </div>
 
-					<div class="form-group row">
-						<div class="col-sm-1 offset-sm-2">
-							<input type="submit" class="btn btn-primary" value="Save" />
-						</div>
-					</div>
-				</form>
-			</div>
-		</div>
+        <div class="form-group row mb-3">
+          <label for="file" class="col-sm-2 col-form-label">Imagen</label>
+          <div class="col-sm-6">
+            <input type="file" name="file" id="file" class="form-control">
+          </div>
+        </div>
 
-	</div>
+        <div class="form-group row">
+          <div class="col-sm-1 offset-sm-2">
+            <input type="submit" class="btn btn-primary" value="Save"/>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 
-	<footer th:replace="~{/layouts/main :: footer}"></footer>
+</div>
+
+<footer th:replace="~{/layouts/main :: footer}"></footer>
 </body>
 </html>

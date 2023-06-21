@@ -3,6 +3,7 @@ package com.springboot.app.controllers;
 import java.util.Map;
 import java.util.Optional;
 
+import com.springboot.app.services.IUploadFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springboot.app.models.entity.Client;
@@ -31,6 +33,9 @@ public class ClientController {
 
   @Autowired
   private IClientService clientService;
+
+  @Autowired
+  private IUploadFileService uploadFileService;
 
   @RequestMapping(value = "/list", method = RequestMethod.GET)
   public String getList(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
@@ -55,8 +60,18 @@ public class ClientController {
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.POST)
-  public String createClient(@Valid Client client, BindingResult result, Model model, RedirectAttributes flash,
-      SessionStatus status) {
+  public String createClient(@Valid Client client, BindingResult result, Model model, @RequestParam("file") MultipartFile image, RedirectAttributes flash,
+                             SessionStatus status) {
+
+    try{
+      String imageName = image.getOriginalFilename();
+      uploadFileService.uploadImage(image);
+      client.setImage(imageName);
+      String successStr = String.format("The Image '%s' was successfully uploaded", imageName);
+      flash.addFlashAttribute("success", successStr);
+    }catch(IllegalArgumentException ex) {
+      model.addAttribute("error", ex.getMessage());
+    }
 
     if (result.hasErrors()) {
       model.addAttribute("title", "Create Client");
