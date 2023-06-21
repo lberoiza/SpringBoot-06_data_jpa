@@ -57,6 +57,8 @@ public class Client implements Serializable {
   @Temporal(TemporalType.TIMESTAMP)
   private Date updatedAt;
 
+  private String image;
+
   @PrePersist
   public void prePersist() {
     updatedAt = new Date();
@@ -117,6 +119,14 @@ public class Client implements Serializable {
 
   public void setUpdatedAt(Date updatedAt) {
     this.updatedAt = updatedAt;
+  }
+
+  public String getImage() {
+    return image;
+  }
+
+  public void setImage(String image) {
+    this.image = image;
   }
 
   public static long getSerialversionuid() {
