@@ -24,7 +24,7 @@ public class ImageController {
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
 
-  @GetMapping(value = "/images/{filename:.+}")
+//  @GetMapping(value = "/images/{filename:.+}")
   public ResponseEntity<Resource> showImage(@PathVariable String filename) {
     Path imagePath = uploadFileService.getRootPathImages().resolve(filename).toAbsolutePath();
     logger.info("Pathimage: " + imagePath);

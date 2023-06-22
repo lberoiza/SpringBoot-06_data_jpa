@@ -20,13 +20,13 @@ public class Config implements WebMvcConfigurer {
   @Value("${dir.images}")
   private String dirImages;
 
-//
-//  @Override
-//  public void addResourceHandlers(ResourceHandlerRegistry registry) {
-//    WebMvcConfigurer.super.addResourceHandlers(registry);
-//    registry.addResourceHandler(getResourceHandlerSrt(urlImages))
-//        .addResourceLocations(getResourceLocationSrt(dirImages));
-//  }
+
+  @Override
+  public void addResourceHandlers(ResourceHandlerRegistry registry) {
+    WebMvcConfigurer.super.addResourceHandlers(registry);
+    registry.addResourceHandler(getResourceHandlerSrt(urlImages))
+        .addResourceLocations(getResourceLocationSrt(dirImages));
+  }
 
   private String getResourceHandlerSrt(String url){
     return String.format("%s/**", url);
