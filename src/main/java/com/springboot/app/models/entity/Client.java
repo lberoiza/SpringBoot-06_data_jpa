@@ -73,6 +73,10 @@ public class Client implements Serializable {
     return getId() != null && getId() > 0;
   }
 
+  public boolean hasImage() {
+    return this.image != null && !this.image.isEmpty();
+  }
+
   public Long getId() {
     return id;
   }
