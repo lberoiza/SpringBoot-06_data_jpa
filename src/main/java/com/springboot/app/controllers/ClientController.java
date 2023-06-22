@@ -59,7 +59,7 @@ public class ClientController {
     Page<Client> clients = clientService.findAll(pageable);
     model.addAttribute("clients", clients);
 
-    PageRender<Client> pageRender = new PageRender<Client>("/client/list", clients);
+    PageRender<Client> pageRender = new PageRender<>("/client/list", clients);
     model.addAttribute("pageRender", pageRender);
     return "client/show_list";
 
@@ -77,8 +77,7 @@ public class ClientController {
                              SessionStatus status) {
 
     try{
-      String imageName = image.getOriginalFilename();
-      uploadFileService.uploadImage(image);
+      String imageName = uploadFileService.uploadImage(image);
       client.setImage(imageName);
       String successStr = String.format("The Image '%s' was successfully uploaded", imageName);
       flash.addFlashAttribute("info", successStr);

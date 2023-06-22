@@ -7,5 +7,5 @@ import java.nio.file.Path;
 public interface IUploadFileService {
   public Path getRootPathImages();
 
-  public void uploadImage(MultipartFile file);
+  public String uploadImage(MultipartFile file);
 }

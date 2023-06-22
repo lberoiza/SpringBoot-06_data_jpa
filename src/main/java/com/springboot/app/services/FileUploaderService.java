@@ -9,6 +9,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.UUID;
 
 @Primary
 @Service("FileUploaderService")
@@ -21,14 +22,14 @@ public class FileUploaderService implements IUploadFileService {
     this.initializeImageRootPath(imageDir);
   }
 
-  private void initializeImageRootPath(String imageDir){
+  private void initializeImageRootPath(String imageDir) {
     this.rootPathImages = Paths.get(imageDir);
     createDirIfNotExists(this.rootPathImages.toFile());
   }
 
   @Override
-  public void uploadImage(MultipartFile file) {
-    this.uploadFile(file, this.rootPathImages.toFile().getAbsolutePath());
+  public String uploadImage(MultipartFile file) {
+    return this.uploadFile(file, this.rootPathImages.toFile().getAbsolutePath());
   }
 
   @Override
@@ -46,18 +47,26 @@ public class FileUploaderService implements IUploadFileService {
     }
   }
 
-  private void uploadFile(MultipartFile file, String rootPath) {
+  private String uploadFile(MultipartFile file, String rootPath) {
     if (file.isEmpty()) {
       throw new IllegalArgumentException("The File is empty");
     }
 
+    String uniqueFilename = this.createUniqueName(file.getOriginalFilename());
     try {
       byte[] bytes = file.getBytes();
-      Path pathDestination = Paths.get(String.format("%s//%s", rootPath, file.getOriginalFilename()));
+      Path pathDestination = Paths.get(String.format("%s/%s", rootPath, uniqueFilename));
       Files.write(pathDestination, bytes);
     } catch (Exception ex) {
       throw new IllegalStateException("It was a error by uploading");
     }
 
+    return uniqueFilename;
   }
+
+  private String createUniqueName(String filename) {
+    String uuid = UUID.randomUUID().toString();
+    return String.format("%s_%s", uuid, filename);
+  }
+
 }
