@@ -34,12 +34,12 @@ public class ClientController {
   private IFileService fileService;
 
 
-  @GetMapping(value="/{id}")
-  public String showClientDetails(@PathVariable(value = "id") Long clientId, Model model, RedirectAttributes flash){
+  @GetMapping(value = "/{id}")
+  public String showClientDetails(@PathVariable(value = "id") Long clientId, Model model, RedirectAttributes flash) {
 
     Optional<Client> result = clientService.findById(clientId);
 
-    if(result.isEmpty()){
+    if (result.isEmpty()) {
       flash.addFlashAttribute("error", String.format("The Client with id %d was not found", clientId));
       return "redirect:/client/list";
     }
@@ -76,14 +76,20 @@ public class ClientController {
   public String createClient(@Valid Client client, BindingResult result, Model model, @RequestParam("file") MultipartFile image, RedirectAttributes flash,
                              SessionStatus status) {
 
-    try{
-      String imageName = fileService.uploadImage(image);
-      client.setImage(imageName);
-      String successStr = String.format("The Image '%s' was successfully uploaded", imageName);
-      flash.addFlashAttribute("info", successStr);
-    }catch(IllegalArgumentException ex) {
-      model.addAttribute("error", ex.getMessage());
+    if(!image.isEmpty()){
+      try {
+        String imageName = fileService.uploadImage(image);
+        if(client.hasImage()){
+          fileService.deleteImage(client.getImage());
+        }
+        client.setImage(imageName);
+        String successStr = String.format("The Image '%s' was successfully uploaded", imageName);
+        flash.addFlashAttribute("info", successStr);
+      } catch (IllegalArgumentException ex) {
+        model.addAttribute("error", ex.getMessage());
+      }
     }
+
 
     if (result.hasErrors()) {
       model.addAttribute("title", "Create Client");
@@ -117,8 +123,17 @@ public class ClientController {
 
   @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
   public String deleteClient(@PathVariable Long id, RedirectAttributes flash) {
-    clientService.delete(id);
-    flash.addFlashAttribute("sucess", "The Client was successful deleted.");
+    Optional<Client> result = clientService.findById(id);
+    if (result.isPresent()) {
+      Client client = result.get();
+      if (fileService.deleteImage(client.getImage())) {
+        flash.addFlashAttribute("info", "The Image of the Client was successful deleted.");
+      }
+      clientService.delete(id);
+      flash.addFlashAttribute("sucess", "The Client was successful deleted.");
+    } else {
+      flash.addFlashAttribute("error", "The Client was not found in the BD.");
+    }
     return "redirect:/client/list";
   }
 
