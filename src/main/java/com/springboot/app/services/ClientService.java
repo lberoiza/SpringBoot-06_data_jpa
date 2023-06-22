@@ -33,8 +33,8 @@ public class ClientService implements IClientService {
 
   @Override
   @Transactional
-  public void saveOrUpdate(Client client) {
-    clientDao.save(client);
+  public Client saveOrUpdate(Client client) {
+    return clientDao.save(client);
   }
 
   @Override

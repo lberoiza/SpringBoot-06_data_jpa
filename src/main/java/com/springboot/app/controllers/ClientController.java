@@ -94,10 +94,11 @@ public class ClientController {
 
     String operationTypString = client.hasValidId() ? "updated" : "created";
 
-    clientService.saveOrUpdate(client);
+    client = clientService.saveOrUpdate(client);
     status.setComplete();
     flash.addFlashAttribute("sucess", String.format("The Client was successful %s", operationTypString));
-    return "redirect:/client/list";
+    flash.addFlashAttribute("client", client);
+    return "redirect:/client/" + client.getId();
 
   }
 

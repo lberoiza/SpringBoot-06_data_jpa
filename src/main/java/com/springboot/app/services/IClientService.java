@@ -13,7 +13,7 @@ public interface IClientService {
 
   public Page<Client> findAll(Pageable pageable);
 
-  public void saveOrUpdate(Client client);
+  public Client saveOrUpdate(Client client);
 
   public Optional<Client> findById(Long id);
 
