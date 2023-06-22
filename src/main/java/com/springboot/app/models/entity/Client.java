@@ -93,6 +93,10 @@ public class Client implements Serializable {
     return surname;
   }
 
+  public String getFullName() {
+    return String.format("%s %s", this.getName(), this.getSurname());
+  }
+
   public void setSurname(String surname) {
     this.surname = surname;
   }
