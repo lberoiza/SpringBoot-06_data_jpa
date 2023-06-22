@@ -3,7 +3,7 @@ package com.springboot.app.controllers;
 import java.util.Map;
 import java.util.Optional;
 
-import com.springboot.app.services.IUploadFileService;
+import com.springboot.app.services.IFileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -31,7 +31,7 @@ public class ClientController {
   private IClientService clientService;
 
   @Autowired
-  private IUploadFileService uploadFileService;
+  private IFileService fileService;
 
 
   @GetMapping(value="/{id}")
@@ -77,7 +77,7 @@ public class ClientController {
                              SessionStatus status) {
 
     try{
-      String imageName = uploadFileService.uploadImage(image);
+      String imageName = fileService.uploadImage(image);
       client.setImage(imageName);
       String successStr = String.format("The Image '%s' was successfully uploaded", imageName);
       flash.addFlashAttribute("info", successStr);

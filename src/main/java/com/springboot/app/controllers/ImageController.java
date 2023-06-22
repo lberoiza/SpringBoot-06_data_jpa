@@ -1,6 +1,6 @@
 package com.springboot.app.controllers;
 
-import com.springboot.app.services.IUploadFileService;
+import com.springboot.app.services.IFileService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +9,6 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import java.net.MalformedURLException;
@@ -19,14 +18,14 @@ import java.nio.file.Path;
 public class ImageController {
 
   @Autowired
-  private IUploadFileService uploadFileService;
+  private IFileService fileService;
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
 
 //  @GetMapping(value = "/images/{filename:.+}")
   public ResponseEntity<Resource> showImage(@PathVariable String filename) {
-    Path imagePath = uploadFileService.getRootPathImages().resolve(filename).toAbsolutePath();
+    Path imagePath = fileService.getRootPathImages().resolve(filename).toAbsolutePath();
     logger.info("Pathimage: " + imagePath);
 
     Resource resource = null;

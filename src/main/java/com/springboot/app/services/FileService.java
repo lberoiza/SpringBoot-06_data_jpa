@@ -15,14 +15,14 @@ import java.util.UUID;
 
 @Primary
 @Service("FileUploaderService")
-public class FileUploaderService implements IUploadFileService {
+public class FileService implements IFileService {
 
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
   private Path rootPathImages;
 
 
-  public FileUploaderService(@Value("${dir.images}") String imageDir) {
+  public FileService(@Value("${dir.images}") String imageDir) {
     this.initializeImageRootPath(imageDir);
   }
 

@@ -4,7 +4,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
 
-public interface IUploadFileService {
+public interface IFileService {
   public Path getRootPathImages();
 
   public String uploadImage(MultipartFile file);
