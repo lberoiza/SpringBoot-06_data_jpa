@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{/layouts/main :: head}">
+</head>
+<body>
+
+<header th:replace="~{/layouts/main :: header}"></header>
+
+<div class="container py-4">
+  <div class="card bg-light">
+    <div class="card-header text-primary" th:text="${title}"></div>
+
+    <div class="card-body">
+
+      <h4 class="card-title">
+        <a class="btn btn-success" th:href="@{/client/list}">Go back</a>
+      </h4>
+
+      <img th:if="${#strings.length(client.image) > 0}" th:src="@{'/images/'+ ${client.image}}"
+           th:alt="${client.getImage()}"
+           class="img-thumbnail rounded float-sm-start" style="max-width: 25%;">
+
+      <ul class="list-group">
+        <li class="list-group-item" th:text="${client.getName()}"></li>
+        <li class="list-group-item" th:text="${client.getSurname()}"></li>
+        <li class="list-group-item" th:text="${client.getEmail()}"></li>
+        <li class="list-group-item" th:text="${client.createdAt}"></li>
+      </ul>
+
+    </div>
+
+
+  </div>
+</div>
+
+<footer th:replace="~{/layouts/main :: footer}"></footer>
+</body>
+</html>
