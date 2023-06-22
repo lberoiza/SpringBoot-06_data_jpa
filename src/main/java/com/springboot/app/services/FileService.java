@@ -37,10 +37,23 @@ public class FileService implements IFileService {
   }
 
   @Override
+  public boolean deleteImage(String imageName) {
+    File imageFile = this.rootPathImages.resolve(imageName).toAbsolutePath().toFile();
+    return deleteFile(imageFile);
+  }
+
+  @Override
   public Path getRootPathImages() {
     return rootPathImages;
   }
 
+
+  private boolean deleteFile(File file) {
+    if (file.exists() && file.canRead()) {
+      return file.delete();
+    }
+    return false;
+  }
 
   private void createDirIfNotExists(File dir) {
     if (!dir.exists()) {

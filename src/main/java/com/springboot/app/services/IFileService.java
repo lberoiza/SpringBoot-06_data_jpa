@@ -8,4 +8,6 @@ public interface IFileService {
   public Path getRootPathImages();
 
   public String uploadImage(MultipartFile file);
+
+  public boolean deleteImage(String imageName);
 }
