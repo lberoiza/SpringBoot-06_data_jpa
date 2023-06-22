@@ -1,5 +1,7 @@
 package com.springboot.app.services;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import java.util.UUID;
 @Primary
 @Service("FileUploaderService")
 public class FileUploaderService implements IUploadFileService {
+
+  private final Logger logger = LoggerFactory.getLogger(getClass());
 
   private Path rootPathImages;
 
@@ -56,7 +60,9 @@ public class FileUploaderService implements IUploadFileService {
     try {
       Path pathDestination = Paths.get(String.format("%s/%s", rootPath, uniqueFilename));
       Files.copy(file.getInputStream(), pathDestination);
+      logger.info(String.format("File '%s' was uploaded", uniqueFilename));
     } catch (Exception ex) {
+      logger.error(ex.toString());
       throw new IllegalStateException("It was a error by uploading");
     }
 
