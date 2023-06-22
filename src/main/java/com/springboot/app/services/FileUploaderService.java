@@ -17,7 +17,7 @@ public class FileUploaderService implements IUploadFileService {
   private Path rootPathImages;
 
 
-  public FileUploaderService(@Value("${static.images}") String imageDir) {
+  public FileUploaderService(@Value("${dir.images}") String imageDir) {
     this.initializeImageRootPath(imageDir);
   }
 
