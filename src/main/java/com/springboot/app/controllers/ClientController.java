@@ -11,11 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -36,6 +32,23 @@ public class ClientController {
 
   @Autowired
   private IUploadFileService uploadFileService;
+
+
+  @GetMapping(value="/{id}")
+  public String showClientDetails(@PathVariable(value = "id") Long clientId, Model model, RedirectAttributes flash){
+
+    Optional<Client> result = clientService.findById(clientId);
+
+    if(result.isEmpty()){
+      flash.addFlashAttribute("error", String.format("The Client with id %d was not found", clientId));
+      return "redirect:/client/list";
+    }
+
+    Client client = result.get();
+    model.addAttribute("title", String.format("Details of '%s'", client.getFullName()));
+    model.addAttribute("client", client);
+    return "client/show_details";
+  }
 
   @RequestMapping(value = "/list", method = RequestMethod.GET)
   public String getList(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
