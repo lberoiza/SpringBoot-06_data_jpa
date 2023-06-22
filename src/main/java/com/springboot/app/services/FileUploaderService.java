@@ -54,9 +54,8 @@ public class FileUploaderService implements IUploadFileService {
 
     String uniqueFilename = this.createUniqueName(file.getOriginalFilename());
     try {
-      byte[] bytes = file.getBytes();
       Path pathDestination = Paths.get(String.format("%s/%s", rootPath, uniqueFilename));
-      Files.write(pathDestination, bytes);
+      Files.copy(file.getInputStream(), pathDestination);
     } catch (Exception ex) {
       throw new IllegalStateException("It was a error by uploading");
     }
