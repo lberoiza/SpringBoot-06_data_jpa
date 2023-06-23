@@ -4,11 +4,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
@@ -47,6 +51,20 @@ public class FileService implements IFileService {
     return rootPathImages;
   }
 
+  @Override
+  public Resource getImageAsResource(String imageName) throws MalformedURLException, NoSuchFileException {
+    return getFileAsResource(getRootPathImages().resolve(imageName).toAbsolutePath());
+  }
+
+  private Resource getFileAsResource(Path filePath) throws MalformedURLException, NoSuchFileException {
+    Resource resource = new UrlResource(filePath.toUri());
+    if (!resource.exists() || !resource.isReadable()) {
+      String error = String.format("The File '%s' can't be founded on Server", filePath);
+      logger.error(error);
+      throw new NoSuchFileException(error);
+    }
+    return resource;
+  }
 
   private boolean deleteFile(File file) {
     if (file.exists() && file.canRead()) {
