@@ -24,8 +24,39 @@
         <li class="list-group-item" th:text="${client.getName()}"></li>
         <li class="list-group-item" th:text="${client.getSurname()}"></li>
         <li class="list-group-item" th:text="${client.getEmail()}"></li>
-        <li class="list-group-item" th:text="${client.createdAt}"></li>
+        <li class="list-group-item" th:text="${#dates.format(client.createdAt, 'dd.MM.yyyy')}"></li>
       </ul>
+
+      <div th:if="${#lists.isEmpty(client.invoices)}"
+           class="invoice-container alert alert-info my-4"
+           th:text="'The Client '+ ${client.getFullName()} + ' has not invoices.'">
+      </div>
+
+      <div
+           class="invoice-container">
+
+        <table class="table table-bordered table-striped my-4">
+          <thead class="bg-primary text-white">
+          <tr>
+            <th>Nr. Invoice</th>
+            <th>Description</th>
+            <th>Created at</th>
+            <th>Last Update at</th>
+            <th>Total</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="invoice: ${client.getInvoices()}">
+            <td th:text="${invoice.getId()}"></td>
+            <td th:text="${invoice.getDescription()}"></td>
+            <td th:text="${#dates.format(invoice.getCreatedAt(), 'dd.MM.yyyy')}"></td>
+            <td th:text="${#dates.format(invoice.getUpdatedAt(), 'dd.MM.yyyy')}"></td>
+            <td th:text="${invoice.getTotal()}"></td>
+          </tr>
+          </tbody>
+        </table>
+
+      </div>
 
     </div>
 
