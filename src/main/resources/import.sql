@@ -13,10 +13,21 @@ INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VA
 
 
 /* TABLE: Products */
-INSERT INTO products (price, created_at, updated_at, description, name) VALUES  (750, NOW(), NOW(), '35 inch Television wide screen', 'Panasonic LCD Screen');
-INSERT INTO products (price, created_at, updated_at, description, name) VALUES  (350, NOW(), NOW(), 'Digital Camera Sony DSC-W320B', 'Sony Camera');
-INSERT INTO products (price, created_at, updated_at, description, name) VALUES  (300, NOW(), NOW(), 'Apple Ipod Shuffle', 'Ipod');
-INSERT INTO products (price, created_at, updated_at, description, name) VALUES  (1500, NOW(), NOW(), 'Notebook Sony Vaio 15 inch', 'Sony Vaio');
-INSERT INTO products (price, created_at, updated_at, description, name) VALUES  (279.89, NOW(), NOW(), 'Hewlett Packard Multiprinter', ' Printer HP');
-INSERT INTO products (price, created_at, updated_at, description, name) VALUES  (1359.89, NOW(), NOW(), 'Bicycle Bianchi 17 inch wheels', 'Bianchi Bicycle');
-INSERT INTO products (price, created_at, updated_at, description, name) VALUES  (435, NOW(), NOW(), 'Desk for office', 'Mica Desk');
+INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (1, 750, NOW(), NOW(), '35 inch Television wide screen', 'Panasonic LCD Screen');
+INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (2, 350, NOW(), NOW(), 'Digital Camera Sony DSC-W320B', 'Sony Camera');
+INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (3, 300, NOW(), NOW(), 'Apple Ipod Shuffle', 'Ipod');
+INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (4, 1500, NOW(), NOW(), 'Notebook Sony Vaio 15 inch', 'Sony Vaio');
+INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (5, 279.89, NOW(), NOW(), 'Hewlett Packard Multiprinter', ' Printer HP');
+INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (6, 1359.89, NOW(), NOW(), 'Bicycle Bianchi 17 inch wheels', 'Bianchi Bicycle');
+INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (7, 435, NOW(), NOW(), 'Desk for office', 'Mica Desk');
+
+/* TABLE: Invoice */
+INSERT INTO invoices (id, client_id, created_at, updated_at, description, obs) VALUES (1, 1, NOW(), NOW(), 'Office Invoice', 'No obs');
+INSERT INTO invoices (id, client_id, created_at, updated_at, description, obs) VALUES (2, 1, NOW(), NOW(), 'Bicycle Invoice', 'No obs needed');
+
+/* TABLE: Invoice Items*/
+INSERT INTO invoice_items (invoice_id, product_id, quantity) VALUES (1, 1, 2);
+INSERT INTO invoice_items (invoice_id, product_id, quantity) VALUES (1, 4, 3);
+INSERT INTO invoice_items (invoice_id, product_id, quantity) VALUES (1, 5, 1);
+INSERT INTO invoice_items (invoice_id, product_id, quantity) VALUES (1, 7, 6);
+INSERT INTO invoice_items (invoice_id, product_id, quantity) VALUES (2, 6, 5);
