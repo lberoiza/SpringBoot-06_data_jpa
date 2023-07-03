@@ -1,0 +1,51 @@
+package com.springboot.app.models.entity;
+
+import jakarta.persistence.*;
+
+import java.io.Serializable;
+
+@Entity
+@Table(name = "invoice_items")
+public class InvoiceItem implements Serializable {
+
+  private static final long serialVersionUID = 7273747430179859851L;
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long id;
+
+  private Integer quantity;
+
+  @JoinColumn(name = "product_id")
+  @ManyToOne(fetch = FetchType.LAZY)
+  private Product product;
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public Integer getQuantity() {
+    return quantity;
+  }
+
+  public void setQuantity(Integer quantity) {
+    this.quantity = quantity;
+  }
+
+  public Product getProduct() {
+    return product;
+  }
+
+  public void setProduct(Product product) {
+    this.product = product;
+  }
+
+  public Double getAmount() {
+    return this.quantity.doubleValue() * this.product.getPrice();
+  }
+
+}

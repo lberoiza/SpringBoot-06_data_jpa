@@ -1,20 +1,14 @@
 package com.springboot.app.models.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,13 +18,8 @@ import jakarta.validation.constraints.Past;
 @Table(name = "clients")
 public class Client implements Serializable {
 
+  @Serial
   private static final long serialVersionUID = -7205843364359501687L;
-
-  @Override
-  public String toString() {
-    return "Client [id=" + id + ", name=" + name + ", surname=" + surname + ", email=" + email + ", createdAt="
-        + createdAt + ", updatedAt=" + updatedAt + "]";
-  }
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -58,6 +47,14 @@ public class Client implements Serializable {
   private Date updatedAt;
 
   private String image;
+
+  @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Invoice> invoices;
+
+
+  public Client() {
+    this.invoices = new ArrayList<>();
+  }
 
   @PrePersist
   public void prePersist() {
@@ -137,8 +134,35 @@ public class Client implements Serializable {
     this.image = image;
   }
 
+  public List<Invoice> getInvoices() {
+    return invoices;
+  }
+
+  public void setInvoices(List<Invoice> invoices) {
+    this.invoices = invoices;
+  }
+
+  public void addInvoice(Invoice invoice) {
+    this.invoices.add(invoice);
+  }
+
   public static long getSerialversionuid() {
     return serialVersionUID;
   }
+
+  @Override
+  public String toString() {
+    return "Client{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", surname='" + surname + '\'' +
+        ", email='" + email + '\'' +
+        ", createdAt=" + createdAt +
+        ", updatedAt=" + updatedAt +
+        ", image='" + image + '\'' +
+        ", invoices=" + invoices +
+        '}';
+  }
+
 
 }
