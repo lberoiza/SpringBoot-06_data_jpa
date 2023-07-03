@@ -32,7 +32,7 @@
            th:text="'The Client '+ ${client.getFullName()} + ' has not invoices.'">
       </div>
 
-      <div
+      <div th:if="${not #lists.isEmpty(client.invoices)}"
            class="invoice-container">
 
         <table class="table table-bordered table-striped my-4">
