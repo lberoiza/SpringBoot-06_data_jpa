@@ -13,7 +13,7 @@
     <div class="card-body">
 
       <h4 class="card-title">
-        <a class="btn btn-success" th:href="@{/client/list}">Go back</a>
+        <a class="btn btn-success" th:href="@{/client/list}">Go back to List of Clients</a>
       </h4>
 
       <img th:if="${#strings.length(client.image) > 0}" th:src="@{'/images/'+ ${client.image}}"

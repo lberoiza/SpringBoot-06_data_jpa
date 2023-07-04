@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{/layouts/main :: head}">
+</head>
+<body>
+
+<header th:replace="~{/layouts/main :: header}"></header>
+
+<div class="container py-4">
+  <div class="card bg-light">
+    <div class="card-header text-primary" th:text="${title}"></div>
+    <div class="card-body">
+
+      <h4 class="card-title">
+        <a class="btn btn-success" th:href="@{'/client/' + ${invoice.client.id}}" th:text="'Go to ' + ${invoice.client.fullName} + ' page'"></a>
+      </h4>
+
+
+      <div th:insert="~{/components/error_block :: ErrorBlock}"
+           th:object="${invoice}" th:remove="tag"></div>
+      <form th:action="@{/invoice/form}" th:object="${invoice}"
+            method="POST" enctype="multipart/form-data">
+
+        <div class="form-group row mb-3">
+          <label class="col-sm-2 col-form-label" for="client">Client</label>
+          <div class="col-sm-6">
+            <input type="text" id="client" class="form-control" disabled="disabled" th:value="${invoice.client.fullName}"/>
+          </div>
+        </div>
+
+        <div class="form-group row mb-3">
+          <label class="col-sm-2 col-form-label" for="name">Description</label>
+          <div class="col-sm-6">
+            <input type="text" id="name" class="form-control"
+                   th:field="*{description}" th:errorclass="'is-invalid'"/> <small
+              class="form-text text-danger"
+              th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></small>
+          </div>
+        </div>
+
+        <div class="form-group row mb-3">
+          <label class="col-sm-2 col-form-label" for="obs">Observation</label>
+          <div class="col-sm-6">
+            <textarea id="obs" class="form-control"
+                      th:field="*{obs}" th:errorclass="'is-invalid'">
+            </textarea>
+            <small class="form-text text-danger" th:if="${#fields.hasErrors('obs')}" th:errors="*{obs}"></small>
+          </div>
+        </div>
+
+        <!--        <div class="form-group row mb-3">-->
+        <!--          <label class="col-sm-2 col-form-label" for="email">Email</label>-->
+        <!--          <div class="col-sm-6">-->
+        <!--            <input type="email" id="email" class="form-control"-->
+        <!--                   th:field="*{email}" th:errorclass="'is-invalid'"/> <small-->
+        <!--              class="form-text text-danger"-->
+        <!--              th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>-->
+        <!--          </div>-->
+        <!--        </div>-->
+
+        <!--        <div class="form-group row mb-3">-->
+        <!--          <label class="col-sm-2 col-form-label" for="date">Date</label>-->
+        <!--          <div class="col-sm-6">-->
+        <!--            <input type="date" id="date" class="form-control"-->
+        <!--                   th:field="*{createdAt}" th:errorclass="'is-invalid'"/> <small-->
+        <!--              class="form-text text-danger"-->
+        <!--              th:if="${#fields.hasErrors('createdAt')}"-->
+        <!--              th:errors="*{createdAt}"></small>-->
+        <!--          </div>-->
+        <!--        </div>-->
+
+        <!--        <div class="form-group row mb-3">-->
+        <!--          <label for="file" class="col-sm-2 col-form-label">Imagen</label>-->
+        <!--          <div class="col-sm-6">-->
+        <!--            <input type="file" name="file" id="file" class="form-control">-->
+        <!--          </div>-->
+        <!--        </div>-->
+
+        <div class="form-group row">
+          <div class="col-sm-1 offset-sm-2">
+            <input type="submit" class="btn btn-primary" value="Save"/>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+</div>
+
+<footer th:replace="~{/layouts/main :: footer}"></footer>
+</body>
+</html>
