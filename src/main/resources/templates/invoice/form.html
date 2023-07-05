@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head th:replace="~{/layouts/main :: head}">
-</head>
+<head th:replace="~{/layouts/main :: head}"></head>
 <body>
 
 <header th:replace="~{/layouts/main :: header}"></header>
@@ -12,7 +11,8 @@
     <div class="card-body">
 
       <h4 class="card-title">
-        <a class="btn btn-success" th:href="@{'/client/' + ${invoice.client.id}}" th:text="'Go to ' + ${invoice.client.fullName} + ' page'"></a>
+        <a class="btn btn-success" th:href="@{'/client/' + ${invoice.client.id}}"
+           th:text="'Go to ' + ${invoice.client.fullName} + ' page'"></a>
       </h4>
 
 
@@ -24,14 +24,15 @@
         <div class="form-group row mb-3">
           <label class="col-sm-2 col-form-label" for="client">Client</label>
           <div class="col-sm-6">
-            <input type="text" id="client" class="form-control" disabled="disabled" th:value="${invoice.client.fullName}"/>
+            <input type="text" id="client" class="form-control" disabled="disabled"
+                   th:value="${invoice.client.fullName}"/>
           </div>
         </div>
 
         <div class="form-group row mb-3">
-          <label class="col-sm-2 col-form-label" for="name">Description</label>
+          <label class="col-sm-2 col-form-label" for="description">Description</label>
           <div class="col-sm-6">
-            <input type="text" id="name" class="form-control"
+            <input type="text" id="description" class="form-control"
                    th:field="*{description}" th:errorclass="'is-invalid'"/> <small
               class="form-text text-danger"
               th:if="${#fields.hasErrors('description')}" th:errors="*{description}"></small>
@@ -48,33 +49,16 @@
           </div>
         </div>
 
-        <!--        <div class="form-group row mb-3">-->
-        <!--          <label class="col-sm-2 col-form-label" for="email">Email</label>-->
-        <!--          <div class="col-sm-6">-->
-        <!--            <input type="email" id="email" class="form-control"-->
-        <!--                   th:field="*{email}" th:errorclass="'is-invalid'"/> <small-->
-        <!--              class="form-text text-danger"-->
-        <!--              th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></small>-->
-        <!--          </div>-->
-        <!--        </div>-->
+        <div class="form-group row mb-3">
+          <label class="col-sm-2 col-form-label" for="product">Product</label>
+          <div class="col-sm-6">
+            <datalist id="datalist-product"></datalist>
+            <input type="search" id="product" list="datalist-product" autocomplete="off" class="form-control form-select"/>
+            <small class="form-text text-danger" id="product_error"></small>
+          </div>
+        </div>
 
-        <!--        <div class="form-group row mb-3">-->
-        <!--          <label class="col-sm-2 col-form-label" for="date">Date</label>-->
-        <!--          <div class="col-sm-6">-->
-        <!--            <input type="date" id="date" class="form-control"-->
-        <!--                   th:field="*{createdAt}" th:errorclass="'is-invalid'"/> <small-->
-        <!--              class="form-text text-danger"-->
-        <!--              th:if="${#fields.hasErrors('createdAt')}"-->
-        <!--              th:errors="*{createdAt}"></small>-->
-        <!--          </div>-->
-        <!--        </div>-->
 
-        <!--        <div class="form-group row mb-3">-->
-        <!--          <label for="file" class="col-sm-2 col-form-label">Imagen</label>-->
-        <!--          <div class="col-sm-6">-->
-        <!--            <input type="file" name="file" id="file" class="form-control">-->
-        <!--          </div>-->
-        <!--        </div>-->
 
         <div class="form-group row">
           <div class="col-sm-1 offset-sm-2">
@@ -88,5 +72,10 @@
 </div>
 
 <footer th:replace="~{/layouts/main :: footer}"></footer>
+<script th:src="@{/application/js/invoice/form.js}"></script>
+<script th:src="@{/application/js/utils/Debounce.js}"></script>
+<script lang="js">
+  new InvoiceForm();
+</script>
 </body>
 </html>
