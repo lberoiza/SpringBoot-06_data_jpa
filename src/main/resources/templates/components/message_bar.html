@@ -7,7 +7,7 @@
 <body>
 
 
-	<div class="message-bar-container" th:fragment="MessageBar">
+	<div id="message-bar" class="message-bar-container" th:fragment="MessageBar">
     <div class="alert alert-success" th:if="${sucess}" th:text="${sucess}"></div>
     <div class="alert alert-info" th:if="${info}" th:text="${info}"></div>
     <div class="alert alert-warning" th:if="${warning}" th:text="${warning}"></div>
