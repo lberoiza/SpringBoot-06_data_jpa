@@ -1,0 +1,3 @@
+.currency-euro::after{
+  content:" €";
+}
