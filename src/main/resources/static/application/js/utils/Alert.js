@@ -38,5 +38,8 @@ class Alert {
     this.createMessageElement(msg, clear, Alert.CLASS_INFO)
   }
 
+  static clearMessages(){
+    document.getElementById(this.MESSAGE_DIV_ID).innerHTML = "";
+  }
 
 }
