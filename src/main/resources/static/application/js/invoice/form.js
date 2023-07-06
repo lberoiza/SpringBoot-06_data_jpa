@@ -6,6 +6,12 @@ class InvoiceForm {
   INPUT_PRODUCT_ID = "product";
   DATALIST_PRODUCT_ID = "datalist-product";
   BUTTON_ADD_PRODUCT = "add-product";
+  ITEM_ROW_TEMPLATE_ID = "item-invoice-model";
+  TABLE_INVOICE_TBODY_ID = "table-invoice-tbody";
+  TABLE_INVOICE_ITEM_ROW_ID_PREFIX = "item-row"
+  INPUT_QUANTITY_ID_PREFIX = "item-quantity";
+  SPAN_AMOUNT_ID_PREFIX = "item-total";
+  SPAN_INVOICE_TOTAL = "invoice-total"
 
   constructor() {
     this.selectedProductMap = new Map();
@@ -21,6 +27,9 @@ class InvoiceForm {
     this.inputSearchProduct = document.getElementById(this.INPUT_PRODUCT_ID);
     this.datalistProduct = document.getElementById(this.DATALIST_PRODUCT_ID);
     this.buttonAddProduct = document.getElementById(this.BUTTON_ADD_PRODUCT);
+    this.rowModel = document.getElementById(this.ITEM_ROW_TEMPLATE_ID);
+    this.invoiceTableTbody = document.getElementById(this.TABLE_INVOICE_TBODY_ID);
+    this.spanInvoiceTotal = document.getElementById(this.SPAN_INVOICE_TOTAL);
   }
 
 
@@ -35,6 +44,19 @@ class InvoiceForm {
     return this.inputSearchProduct.value.trim();
   }
 
+
+  getQuantityInput(productId) {
+    return document.getElementById(`${this.INPUT_QUANTITY_ID_PREFIX}-${productId}`);
+  }
+
+
+  getAmountSpan(productId) {
+    return document.getElementById(`${this.SPAN_AMOUNT_ID_PREFIX}-${productId}`);
+  }
+
+  getItemRow(productId) {
+    return document.getElementById(`${this.TABLE_INVOICE_ITEM_ROW_ID_PREFIX}-${productId}`)
+  }
 
   getProducts() {
     let productSearchTerm = this.getProductSearchTerm();
@@ -73,16 +95,15 @@ class InvoiceForm {
     const selectedProduct = this.getSelectedProduct();
     if (selectedProduct) {
       const productId = selectedProduct.id
-      let invoiceItem = {};
+      let invoiceItem = new InvoiceItem();
       if (this.selectedProductMap.has(productId)) {
         invoiceItem = this.selectedProductMap.get(productId)
-        invoiceItem.quantity += 1;
+        this.quantityChangesAndUpdateAmount(productId, invoiceItem.quantity + 1);
       } else {
-        invoiceItem = {
-          quantity: 1,
-          product: selectedProduct
-        }
+        invoiceItem.setProduct(selectedProduct);
         this.selectedProductMap.set(productId, invoiceItem);
+        this.createNewRow(invoiceItem);
+        this.updateInvoiceTotal();
       }
       Alert.showSuccess(`Product ${invoiceItem.product.name} added.`)
       this.clearDataListAndInput();
@@ -93,18 +114,94 @@ class InvoiceForm {
   }
 
 
+  createNewRow(invoiceItem) {
+    let row = this.rowModel.innerHTML;
+    row = row.replace(/{product_id}/g, invoiceItem.product.id);
+    row = row.replace(/{product_name}/g, invoiceItem.product.name);
+    row = row.replace(/{product_price}/g, invoiceItem.product.price);
+    const rowFragment = document.createRange().createContextualFragment(row).querySelector('tbody tr');
+    this.invoiceTableTbody.appendChild(rowFragment);
+  }
+
+
   clearDataListAndInput() {
-    // this.datalistProduct.innerHTML = "";
     this.inputSearchProduct.value = "";
+  }
+
+
+  quantityChangesAndUpdateAmount(productId, quantity) {
+    Alert.clearMessages();
+    const invoiceItem = this.selectedProductMap.get(productId)
+    const quantityUpdated = invoiceItem.setQuantity(quantity);
+
+    if (!quantityUpdated) {
+      Alert.showWarning(`The Quantity of ${invoiceItem.product.name}  can not be less than 1.`);
+    } else {
+      Alert.showInfo(`The Quantity of ${invoiceItem.product.name} has changed.`)
+    }
+
+    this.getQuantityInput(productId).value = invoiceItem.quantity;
+    this.updateAmount(invoiceItem)
+  }
+
+  updateAmount(invoiceItem) {
+    const productId = invoiceItem.product.id;
+    const quantity = invoiceItem.quantity;
+    const price = invoiceItem.product.price;
+    const span = this.getAmountSpan(productId)
+    span.textContent = `${quantity * price}`;
+    this.updateInvoiceTotal();
+  }
+
+
+  deleteRow(productId) {
+    this.selectedProductMap.delete(productId);
+    this.getItemRow(productId).remove();
+    this.updateInvoiceTotal();
+  }
+
+
+  updateInvoiceTotal() {
+    let total = 0;
+    this.selectedProductMap.forEach((invoiceItem, productId,) => {
+      total += invoiceItem.quantity * invoiceItem.product.price;
+    })
+    this.spanInvoiceTotal.textContent = total;
   }
 
   submitInvoice(event) {
     event.preventDefault();
-    console.log("submit");
-    console.log("list of products", this.selectedProductMap);
-
   }
 
 
 }
 
+
+class InvoiceItem {
+  constructor() {
+    this.quantity = 1;
+    this.product = {
+      id: 0,
+      description: '',
+      name: '',
+      price: 0
+    }
+  }
+
+  setQuantity(q) {
+    const quantity = parseInt(q);
+    if (quantity >= 1) {
+      this.quantity = quantity
+      return true;
+    }
+    return false;
+  }
+
+  setProduct(product = {}) {
+    this.product.id = parseInt(product.id ?? 0);
+    this.product.price = parseInt(product.price ?? 0);
+    this.product.description = product.description ?? '';
+    this.product.name = product.name ?? '';
+  }
+
+}
