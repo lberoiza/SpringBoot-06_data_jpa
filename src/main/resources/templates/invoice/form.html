@@ -53,7 +53,8 @@
           <label class="col-sm-2 col-form-label" for="product">Product</label>
           <div class="col-9 col-sm-5">
             <datalist id="datalist-product"></datalist>
-            <input type="search" id="product" list="datalist-product" autocomplete="off" class="form-control form-select"/>
+            <input type="search" id="product" list="datalist-product" autocomplete="off"
+                   class="form-control form-select"/>
             <small class="form-text text-danger" id="product_error"></small>
           </div>
           <div class="col-1 col-sm-1">
@@ -61,6 +62,29 @@
           </div>
         </div>
 
+        <div class="py-5">
+          <table id="table-invoice" class="table table-striped table-sm table-hover">
+            <thead class="bg-primary text-white">
+            <tr>
+              <th>Product</th>
+              <th>Price</th>
+              <th>Quantity</th>
+              <th>Total</th>
+              <th>Delete</th>
+            </tr>
+            </thead>
+            <tbody id="table-invoice-tbody"></tbody>
+            <tfoot class="text-bg-secondary">
+            <tr>
+              <th></th>
+              <th></th>
+              <th class="text-end">Invoice Total:</th>
+              <th><span id="invoice-total" class="text-end currency-euro">0</span></th>
+              <th></th>
+            </tr>
+            </tfoot>
+          </table>
+        </div>
 
 
         <div class="form-group row">
@@ -74,11 +98,32 @@
 
 </div>
 
+<div>
+  <template id="item-invoice-model">
+    <table>
+      <tbody>
+      <tr id="item-row-{product_id}">
+        <td class="d-none"><input type="hidden" name="product_id" value="{product_id}"/></td>
+        <td>{product_name}</td>
+        <td>{product_price}</td>
+        <td><input type="number" name="product_quantity[]" id="item-quantity-{product_id}" value="1"
+                   onchange="invoiceForm.quantityChangesAndUpdateAmount({product_id}, this.value)"/></td>
+        <td><span id="item-total-{product_id}" class="currency-euro">{product_price}</span></td>
+        <td><a href="#" class="btn btn-danger btn-sm" onclick="invoiceForm.deleteRow({product_id})">X</a></td>
+      </tr>
+      </tbody>
+    </table>
+
+
+  </template>
+</div>
+
+
 <footer th:replace="~{/layouts/main :: footer}"></footer>
 <script th:src="@{/application/js/invoice/form.js}"></script>
 <script th:src="@{/application/js/utils/Debounce.js}"></script>
 <script lang="js">
-  new InvoiceForm();
+  let invoiceForm = new InvoiceForm();
 </script>
 </body>
 </html>
