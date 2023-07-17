@@ -122,4 +122,13 @@ public class Invoice implements Serializable {
   public Double getTotal() {
     return this.invoiceItems.stream().reduce(0.0, (subtotal, item) -> subtotal + item.getAmount(), Double::sum);
   }
+
+  public Long getClientId(){
+    return this.client.getId();
+  }
+
+  public String getClientFullName(){
+    return this.client.getFullName();
+  }
+
 }
