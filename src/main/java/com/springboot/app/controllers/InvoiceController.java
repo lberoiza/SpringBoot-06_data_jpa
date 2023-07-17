@@ -7,11 +7,13 @@ import com.springboot.app.models.entity.Product;
 import com.springboot.app.services.IClientService;
 import com.springboot.app.services.IInvoiceService;
 import com.springboot.app.services.IProductService;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -58,7 +60,7 @@ public class InvoiceController {
     Invoice invoice = new Invoice();
     invoice.setClient(clientOptional.get());
 
-    String title = String.format("New Invoice of %s", invoice.getClient().getFullName());
+    String title = String.format("New Invoice of %s", invoice.getClientFullName());
     model.addAttribute("title", title);
     model.addAttribute("invoice", invoice);
 
@@ -67,12 +69,27 @@ public class InvoiceController {
 
 
   @PostMapping("/form")
-  public String saveInvoice(Invoice invoice,
+  public String saveInvoice(@Valid Invoice invoice,
+                            BindingResult validation,
+                            Model model,
                             @RequestParam(name = "product_id[]", required = false) Long[] productIds,
                             @RequestParam(name = "product_quantity[]", required = false) Integer[] productQuantities,
                             RedirectAttributes flash,
                             SessionStatus status){
 
+    if(validation.hasErrors()){
+      String title = String.format("New Invoice of %s", invoice.getClientFullName());
+      model.addAttribute("title", title);
+      return "invoice/form";
+    }
+
+
+    if(productIds == null || productIds.length == 0){
+      String title = String.format("New Invoice of %s", invoice.getClientFullName());
+      model.addAttribute("title", title);
+      model.addAttribute("error", "There are not products in the invoice.");
+      return "invoice/form";
+    }
 
 
     for(int i =0; i < productIds.length; i++){

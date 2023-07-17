@@ -1,6 +1,7 @@
 package com.springboot.app.models.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serial;
@@ -20,6 +21,7 @@ public class Invoice implements Serializable {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @NotEmpty
   private String description;
 
   private String obs;
