@@ -73,6 +73,8 @@ public class InvoiceController {
                             RedirectAttributes flash,
                             SessionStatus status){
 
+
+
     for(int i =0; i < productIds.length; i++){
       Long productId = productIds[i];
       Integer quantity = productQuantities[i];
@@ -93,8 +95,11 @@ public class InvoiceController {
       logger.info(infoStr);
     }
 
+    this.clientService.findById(invoice.getClientId()).ifPresent(client -> {
+      invoice.setClient(client);
+      this.invoiceService.saveInvoice(invoice);
+    });
 
-    this.invoiceService.saveInvoice(invoice);
     status.setComplete();
 
     String flashString = String.format("The Invoice (%s) was successfully created for %s", invoice.getId(), invoice.getClientFullName());
@@ -102,8 +107,5 @@ public class InvoiceController {
 
     return "redirect:/client/" + invoice.getClientId();
   }
-
-
-
 
 }
