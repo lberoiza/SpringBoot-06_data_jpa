@@ -2,8 +2,6 @@ package com.springboot.app.services;
 
 import java.util.Optional;
 
-import com.springboot.app.models.dao.IInvoiceDao;
-import com.springboot.app.models.entity.Invoice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
@@ -21,8 +19,6 @@ public class ClientService implements IClientService {
   @Autowired
   private IClientDaoRepository clientDao;
 
-  @Autowired
-  private IInvoiceDao invoiceDao;
 
   @Override
   @Transactional(readOnly = true)
@@ -52,13 +48,6 @@ public class ClientService implements IClientService {
   @Override
   public Page<Client> findAll(Pageable pageable) {
     return clientDao.findAll(pageable);
-  }
-
-
-  @Override
-  @Transactional
-  public void saveInvoice(Invoice invoice){
-    invoiceDao.save(invoice);
   }
 
 }
