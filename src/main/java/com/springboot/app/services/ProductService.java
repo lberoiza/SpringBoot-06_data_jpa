@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Primary
 @Service("ProductService")
@@ -25,5 +26,11 @@ public class ProductService implements IProductService{
   @Transactional(readOnly = true)
   public List<Product> findByName(String name) {
     return productDao.findByName(name);
+  }
+
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<Product> findById(Long id) {
+    return productDao.findById(id);
   }
 }
