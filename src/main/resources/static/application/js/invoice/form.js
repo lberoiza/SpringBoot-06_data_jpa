@@ -170,7 +170,7 @@ class InvoiceForm {
   }
 
   submitInvoice(event) {
-    event.preventDefault();
+    // event.preventDefault();
   }
 
 
