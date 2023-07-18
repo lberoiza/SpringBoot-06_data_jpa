@@ -33,6 +33,11 @@ public class ClientService implements IClientService {
   }
 
   @Override
+  public Optional<Client> fetchClientByIdWithInvoices(Long id) {
+    return Optional.of(clientDao.fetchClientByIdWithInvoices(id));
+  }
+
+  @Override
   @Transactional
   public Client saveOrUpdate(Client client) {
     return clientDao.save(client);

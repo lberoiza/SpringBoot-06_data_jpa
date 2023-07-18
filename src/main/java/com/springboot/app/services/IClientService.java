@@ -17,5 +17,7 @@ public interface IClientService {
 
   Optional<Client> findById(Long id);
 
+  Optional<Client> fetchClientByIdWithInvoices(Long id);
+
   void delete(Long id);
 }

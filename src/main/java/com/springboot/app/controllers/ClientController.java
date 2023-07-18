@@ -37,7 +37,7 @@ public class ClientController {
   @GetMapping(value = "/{id}")
   public String showClientDetails(@PathVariable(value = "id") Long clientId, Model model, RedirectAttributes flash) {
 
-    Optional<Client> result = clientService.findById(clientId);
+    Optional<Client> result = clientService.fetchClientByIdWithInvoices(clientId);
 
     if (result.isEmpty()) {
       flash.addFlashAttribute("error", String.format("The Client with id %d was not found", clientId));
