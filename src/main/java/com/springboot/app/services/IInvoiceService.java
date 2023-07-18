@@ -11,4 +11,6 @@ public interface IInvoiceService {
   void saveInvoice(Invoice invoice);
 
   void deleteById(Long id);
+
+  Optional<Invoice> fetchInvoiceWithClientWithInvoiceItemsWithProduct(Long invoiceId);
 }

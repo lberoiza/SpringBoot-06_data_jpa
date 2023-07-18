@@ -46,7 +46,7 @@ public class InvoiceController {
 
   @GetMapping("/{invoiceId}")
   public String showInvoice(@PathVariable(name = "invoiceId") Long invoiceId, Model model, RedirectAttributes flash) {
-    Optional<Invoice> optionalInvoice = this.invoiceService.findById(invoiceId);
+    Optional<Invoice> optionalInvoice = this.invoiceService.fetchInvoiceWithClientWithInvoiceItemsWithProduct(invoiceId);
 
     if (optionalInvoice.isEmpty()) {
       String error = String.format("The Invoice (%d) was not found in System.", invoiceId);

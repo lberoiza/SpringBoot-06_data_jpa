@@ -31,4 +31,10 @@ public class InvoiceService implements IInvoiceService {
     invoiceDao.deleteById(id);
   }
 
+  @Override
+  @Transactional(readOnly = true)
+  public Optional<Invoice> fetchInvoiceWithClientWithInvoiceItemsWithProduct(Long invoiceId) {
+    return Optional.of(invoiceDao.fetchInvoiceWithClientWithInvoiceItemsWithProduct(invoiceId));
+  }
+
 }
