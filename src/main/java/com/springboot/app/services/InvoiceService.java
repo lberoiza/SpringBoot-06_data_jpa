@@ -25,4 +25,10 @@ public class InvoiceService implements IInvoiceService {
     invoiceDao.save(invoice);
   }
 
+  @Override
+  @Transactional
+  public void deleteById(Long id) {
+    invoiceDao.deleteById(id);
+  }
+
 }

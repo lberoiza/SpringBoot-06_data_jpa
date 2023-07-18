@@ -6,7 +6,9 @@ import java.util.Optional;
 
 public interface IInvoiceService {
 
-  public Optional<Invoice> findById(Long id);
+  Optional<Invoice> findById(Long id);
 
-  public void saveInvoice(Invoice invoice);
+  void saveInvoice(Invoice invoice);
+
+  void deleteById(Long id);
 }
