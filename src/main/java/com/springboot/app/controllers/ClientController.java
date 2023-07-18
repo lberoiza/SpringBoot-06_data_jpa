@@ -101,7 +101,7 @@ public class ClientController {
 
     client = clientService.saveOrUpdate(client);
     status.setComplete();
-    flash.addFlashAttribute("sucess", String.format("The Client was successful %s", operationTypString));
+    flash.addFlashAttribute("success", String.format("The Client was successful %s", operationTypString));
     flash.addFlashAttribute("client", client);
     return "redirect:/client/" + client.getId();
 
@@ -130,7 +130,7 @@ public class ClientController {
         flash.addFlashAttribute("info", "The Image of the Client was successful deleted.");
       }
       clientService.delete(id);
-      flash.addFlashAttribute("sucess", "The Client was successful deleted.");
+      flash.addFlashAttribute("success", "The Client was successful deleted.");
     } else {
       flash.addFlashAttribute("error", "The Client was not found in the BD.");
     }
