@@ -48,7 +48,7 @@ public class InvoiceController {
   public String showInvoice(@PathVariable(name = "invoiceId") Long invoiceId, Model model, RedirectAttributes flash) {
     Optional<Invoice> optionalInvoice = this.invoiceService.findById(invoiceId);
 
-    if (optionalInvoice.isEmpty()){
+    if (optionalInvoice.isEmpty()) {
       String error = String.format("The Invoice (%d) was not found in System.", invoiceId);
       flash.addFlashAttribute("error", error);
       return "redirect:/client/list";
@@ -141,6 +141,24 @@ public class InvoiceController {
     String flashString = String.format("The Invoice (%s) was successfully created for %s", invoice.getId(), invoice.getClientFullName());
     flash.addFlashAttribute("success", flashString);
 
+    return "redirect:/client/" + invoice.getClientId();
+  }
+
+  @GetMapping("delete/{invoiceId}")
+  public String deleteInvoice(@PathVariable Long invoiceId, RedirectAttributes flash) {
+    Optional<Invoice> optionalInvoice = this.invoiceService.findById(invoiceId);
+
+    if (optionalInvoice.isEmpty()) {
+      String errorStr = String.format("The Invoice (%s) is not in system", invoiceId);
+      flash.addFlashAttribute("error", errorStr);
+      return "redirect:/client/list";
+    }
+
+    Invoice invoice = optionalInvoice.get();
+    this.invoiceService.deleteById(invoiceId);
+
+    String successStr = String.format("The Invoice (%d) \"%s\" of %s was deleted.", invoice.getId(), invoice.getDescription(), invoice.getClientFullName());
+    flash.addFlashAttribute("success", successStr);
     return "redirect:/client/" + invoice.getClientId();
   }
 
