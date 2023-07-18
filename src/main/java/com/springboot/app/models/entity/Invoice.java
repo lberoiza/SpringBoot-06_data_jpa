@@ -36,7 +36,7 @@ public class Invoice implements Serializable {
   @Column(name = "updated_at")
   private Date updatedAt;
 
-  @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+  @ManyToOne(fetch = FetchType.LAZY)
   private Client client;
 
   @JoinColumn(name = "invoice_id")
