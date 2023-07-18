@@ -40,6 +40,18 @@ public class InvoiceItem implements Serializable {
     return product;
   }
 
+  public Long getProductId() {
+    return this.product.getId();
+  }
+
+  public String getProductName() {
+    return this.product.getName();
+  }
+
+  public Double getProductPrice() {
+    return this.product.getPrice();
+  }
+
   public void setProduct(Product product) {
     this.product = product;
   }

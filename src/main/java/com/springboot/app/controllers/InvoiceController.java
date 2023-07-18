@@ -37,10 +37,29 @@ public class InvoiceController {
 
   public InvoiceController(@Autowired IClientService clientService,
                            @Autowired IProductService productService,
-                           @Autowired IInvoiceService invoiceService){
+                           @Autowired IInvoiceService invoiceService) {
     this.clientService = clientService;
     this.productService = productService;
     this.invoiceService = invoiceService;
+  }
+
+
+  @GetMapping("/{invoiceId}")
+  public String showInvoice(@PathVariable(name = "invoiceId") Long invoiceId, Model model, RedirectAttributes flash) {
+    Optional<Invoice> optionalInvoice = this.invoiceService.findById(invoiceId);
+
+    if (optionalInvoice.isEmpty()){
+      String error = String.format("The Invoice (%d) was not found in System.", invoiceId);
+      flash.addFlashAttribute("error", error);
+      return "redirect:/client/list";
+    }
+
+    Invoice invoice = optionalInvoice.get();
+
+    String title = String.format("Invoice nr: %d of %s", invoice.getId(), invoice.getClientFullName());
+    model.addAttribute("title", title);
+    model.addAttribute("invoice", invoice);
+    return "invoice/show_details";
   }
 
 
@@ -75,16 +94,16 @@ public class InvoiceController {
                             @RequestParam(name = "product_id[]", required = false) Long[] productIds,
                             @RequestParam(name = "product_quantity[]", required = false) Integer[] productQuantities,
                             RedirectAttributes flash,
-                            SessionStatus status){
+                            SessionStatus status) {
 
-    if(validation.hasErrors()){
+    if (validation.hasErrors()) {
       String title = String.format("New Invoice of %s", invoice.getClientFullName());
       model.addAttribute("title", title);
       return "invoice/form";
     }
 
 
-    if(productIds == null || productIds.length == 0){
+    if (productIds == null || productIds.length == 0) {
       String title = String.format("New Invoice of %s", invoice.getClientFullName());
       model.addAttribute("title", title);
       model.addAttribute("error", "There are not products in the invoice.");
@@ -92,14 +111,14 @@ public class InvoiceController {
     }
 
 
-    for(int i =0; i < productIds.length; i++){
+    for (int i = 0; i < productIds.length; i++) {
       Long productId = productIds[i];
       Integer quantity = productQuantities[i];
       Product product = null;
       String productName = "product not found";
 
       Optional<Product> optionalProduct = productService.findById(productIds[i]);
-      if(optionalProduct.isPresent()){
+      if (optionalProduct.isPresent()) {
         product = optionalProduct.get();
         productName = product.getName();
       }

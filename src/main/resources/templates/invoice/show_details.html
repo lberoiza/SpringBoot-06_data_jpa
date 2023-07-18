@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head th:replace="~{/layouts/main :: head}">
+</head>
+<body>
+
+<header th:replace="~{/layouts/main :: header}"></header>
+
+<div class="container py-4">
+  <div class="card bg-light">
+    <div class="card-header text-primary" th:text="${title}"></div>
+
+    <div class="card-body">
+
+      <h4 class="card-title">
+        <a class="btn btn-success" th:href="@{'/client/' + ${invoice.clientId}}"
+           th:text="'Go to ' + ${invoice.clientFullName} + ' page'"></a>
+      </h4>
+
+      <ul class="list-group my-2">
+        <li class="list-group-item list-group-item-primary">Client Details</li>
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-12 col-sm-2">
+              <label>Client: </label>
+            </div>
+            <div class="col-12 col-sm-10">
+              <span th:text="${invoice.clientFullName}"></span>
+            </div>
+          </div>
+        </li>
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-12 col-sm-2">
+              <label>Email: </label>
+            </div>
+            <div class="col-12 col-sm-10">
+              <span th:text="${invoice.client.email}"></span>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+
+      <ul class="list-group my-2">
+
+        <li class="list-group-item list-group-item-primary">Invoice Details</li>
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-12 col-sm-2">
+              <label>Created at: </label>
+            </div>
+            <div class="col-12 col-sm-10">
+              <span th:text="${#dates.format(invoice.getCreatedAt(), 'dd.MM.yyyy')}"></span>
+            </div>
+          </div>
+        </li>
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-12 col-sm-2">
+              <label>Description: </label>
+            </div>
+            <div class="col-12 col-sm-10">
+              <span th:text="${invoice.description}"></span>
+            </div>
+          </div>
+        </li>
+
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-12 col-sm-2">
+              <label>Total: </label>
+            </div>
+            <div class="col-12 col-sm-10">
+              <span class="currency-euro"
+                    th:text="${#numbers.formatDecimal(invoice.total, 0, 'POINT', 2, 'COMMA')}"></span>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+
+      <table class="table table-bordered table-striped table-hover my-4">
+        <thead class="bg-primary text-white">
+        <tr>
+          <th>Product Nr.</th>
+          <th>Name</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Amount</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="invoiceItem: ${invoice.invoiceItems}">
+          <td th:text="${invoiceItem.productId}"></td>
+          <td th:text="${invoiceItem.productName}"></td>
+          <td><span class="currency-euro"
+                    th:text="${#numbers.formatDecimal(invoiceItem.productPrice, 0, 'POINT', 2, 'COMMA')}"></span></td>
+          <td th:text="${invoiceItem.quantity}"></td>
+          <td><span class="currency-euro"
+                    th:text="${#numbers.formatDecimal(invoiceItem.amount, 0, 'POINT', 2, 'COMMA')}"></span></td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td class="bg-info text-white text-end">Total</td>
+          <td class="bg-info text-white"><span class="currency-euro"
+                                               th:text="${#numbers.formatDecimal(invoice.total, 0, 'POINT', 2, 'COMMA')}"></span>
+          </td>
+        </tr>
+        </tfoot>
+      </table>
+
+      <div class="card border-info mb-3" style="max-width: 20rem;">
+        <div class="card-header">Observations</div>
+        <div class="card-body">
+          <h4 class="card-title" th:if="${#strings.isEmpty(invoice.obs)}">The Invoice has not observations</h4>
+          <p class="card-text" th:text="${invoice.obs}" th:if="${not #strings.isEmpty(invoice.obs)}"></p>
+        </div>
+      </div>
+
+      <a class="btn btn-success" th:href="@{'/client/' + ${invoice.clientId}}"
+         th:text="'Go to ' + ${invoice.clientFullName} + ' page'"></a>
+
+    </div>
+
+  </div>
+
+
+
+</div>
+
+
+<footer th:replace="~{/layouts/main :: footer}"></footer>
+</body>
+</html>
