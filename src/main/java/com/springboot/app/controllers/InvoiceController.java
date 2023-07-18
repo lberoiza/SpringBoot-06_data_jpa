@@ -131,11 +131,7 @@ public class InvoiceController {
       logger.info(infoStr);
     }
 
-    this.clientService.findById(invoice.getClientId()).ifPresent(client -> {
-      invoice.setClient(client);
-      this.invoiceService.saveInvoice(invoice);
-    });
-
+    this.invoiceService.saveInvoice(invoice);
     status.setComplete();
 
     String flashString = String.format("The Invoice (%s) was successfully created for %s", invoice.getId(), invoice.getClientFullName());
