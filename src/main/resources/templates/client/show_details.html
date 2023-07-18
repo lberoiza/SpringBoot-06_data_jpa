@@ -20,7 +20,7 @@
            th:alt="${client.getImage()}"
            class="img-thumbnail rounded float-sm-start" style="max-width: 25%;">
 
-      <ul class="list-group my-2">
+      <ul class="list-group my-4">
 
         <li class="list-group-item list-group-item-primary">Client Details</li>
 
@@ -69,15 +69,19 @@
         </li>
       </ul>
 
+
+      <a th:href="@{'/invoice/form/' + ${client.id}}"
+         class="btn btn-info btn-xs">Create Invoice</a>
+
       <div th:if="${#lists.isEmpty(client.invoices)}"
            class="invoice-container alert alert-info my-4"
            th:text="'The Client '+ ${client.getFullName()} + ' has not invoices.'">
       </div>
 
       <div th:if="${not #lists.isEmpty(client.invoices)}"
-           class="invoice-container">
+           class="invoice-container my-4">
 
-        <table class="table table-bordered table-striped table-hover my-4">
+        <table class="table table-bordered table-striped table-hover">
           <thead class="bg-primary text-white">
           <tr>
             <th>Nr. Invoice</th>
