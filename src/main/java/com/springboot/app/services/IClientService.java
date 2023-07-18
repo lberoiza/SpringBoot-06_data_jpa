@@ -9,13 +9,13 @@ import com.springboot.app.models.entity.Client;
 
 public interface IClientService {
 
-  public Iterable<Client> findAll();
+  Iterable<Client> findAll();
 
-  public Page<Client> findAll(Pageable pageable);
+  Page<Client> findAll(Pageable pageable);
 
-  public Client saveOrUpdate(Client client);
+  Client saveOrUpdate(Client client);
 
-  public Optional<Client> findById(Long id);
+  Optional<Client> findById(Long id);
 
-  public void delete(Long id);
+  void delete(Long id);
 }
