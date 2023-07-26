@@ -76,10 +76,10 @@ public class ClientController {
   public String createClient(@Valid Client client, BindingResult result, Model model, @RequestParam("file") MultipartFile image, RedirectAttributes flash,
                              SessionStatus status) {
 
-    if(!image.isEmpty()){
+    if (!image.isEmpty()) {
       try {
         String imageName = fileService.uploadImage(image);
-        if(client.hasImage()){
+        if (client.hasImage()) {
           fileService.deleteImage(client.getImage());
         }
         client.setImage(imageName);
