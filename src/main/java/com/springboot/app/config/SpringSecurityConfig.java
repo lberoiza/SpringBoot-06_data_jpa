@@ -3,8 +3,7 @@ package com.springboot.app.config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
-import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -54,13 +53,26 @@ public class SpringSecurityConfig {
                 .requestMatchers("/client/**").hasAnyRole("ADMIN")
                 .requestMatchers("/invoice/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated())
-        .csrf(AbstractHttpConfigurer::disable)
         .formLogin(form -> form
             .loginPage("/login")
             .permitAll()
         )
         .logout(LogoutConfigurer::permitAll);
     return http.build();
+  }
+
+
+//  El inicio de sesión redirigirá por defecto al último recurso restringido solicitado de la sesión HTTP actual.
+//  Aparentemente también ha cubierto los recursos JS/CSS/imagen de las páginas HTML generadas.
+//  Cuando la propia página de inicio de sesión hace referencia exactamente a ese archivo JavaScript,
+//  entonces se recordaría como el último recurso restringido solicitado y Spring Security redirigiría ciegamente a él
+//  después de un inicio de sesión satisfactorio.
+//
+//  Es necesario indicar a Spring Security que los excluya de los recursos restringidos.
+//  Una forma sería añadir la siguiente línea al fichero de configuración XML de Spring Security.
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() {
+    return (web) -> web.ignoring().requestMatchers("/application/js/**");
   }
 
 }
