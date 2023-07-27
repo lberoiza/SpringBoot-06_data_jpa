@@ -55,7 +55,10 @@ public class SpringSecurityConfig {
                 .requestMatchers("/invoice/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated())
         .csrf(AbstractHttpConfigurer::disable)
-        .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+        .formLogin(form -> form
+            .loginPage("/login")
+            .permitAll()
+        )
         .logout(LogoutConfigurer::permitAll);
     return http.build();
   }
