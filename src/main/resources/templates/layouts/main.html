@@ -1,23 +1,26 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:fragment="head">
-	<meta charset="UTF-8">
-	<link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
-	<link th:href="@{/css/style.css}" rel="stylesheet">
-	<title th:text="'Spring Boot, Thymeleaf and JPA - ' + ${title}"></title>
+  <meta charset="UTF-8">
+  <link th:href="@{/css/bootstrap.min.css}" rel="stylesheet">
+  <link th:href="@{/css/style.css}" rel="stylesheet">
+  <title th:text="'Spring Boot, Thymeleaf and JPA - ' + ${title}"></title>
 </head>
 <body>
-	<header th:fragment="header">
-		<div th:replace="~{/components/nav_bar :: NavBar}"></div>
-		<div th:replace="~{/components/message_bar :: MessageBar}"></div>
-	</header>
+<header th:fragment="header">
+  <div th:replace="~{/components/nav_bar :: NavBar}"></div>
+  <div th:replace="~{/components/message_bar :: MessageBar}"></div>
+</header>
 
 
-	<footer th:fragment="footer">
-		<h6 class="text-center">Master en Spring Boot de Luis Beroiza</h6>
-		<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
-		<script th:src="@{/application/js/utils/Alert.js}"></script>
-	</footer>
+<footer th:fragment="footer" class="container">
+  <h6 class="text-center">Master en Spring Boot de Luis Beroiza</h6>
+  <p sec:authorize="isAuthenticated()">
+    Logged User: <span sec:authentication="name"></span> | Roles: <span sec:authentication="principal.authorities">Bob</span>
+  </p>
+  <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+  <script th:src="@{/application/js/utils/Alert.js}"></script>
+</footer>
 </body>
 
 </html>
