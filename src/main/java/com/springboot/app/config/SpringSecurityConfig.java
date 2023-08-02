@@ -14,6 +14,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SpringSecurityConfig {
 
+  public static final String ERROR_403_URL = "/error_403";
+
   public static final String[] ENDPOINTS_WHITELIST = {
       "/",
       "/css/**",
@@ -57,19 +59,22 @@ public class SpringSecurityConfig {
             .loginPage("/login")
             .permitAll()
         )
+        .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
+            httpSecurityExceptionHandlingConfigurer.accessDeniedPage(ERROR_403_URL)
+        )
         .logout(LogoutConfigurer::permitAll);
     return http.build();
   }
 
 
-//  El inicio de sesión redirigirá por defecto al último recurso restringido solicitado de la sesión HTTP actual.
-//  Aparentemente también ha cubierto los recursos JS/CSS/imagen de las páginas HTML generadas.
-//  Cuando la propia página de inicio de sesión hace referencia exactamente a ese archivo JavaScript,
-//  entonces se recordaría como el último recurso restringido solicitado y Spring Security redirigiría ciegamente a él
-//  después de un inicio de sesión satisfactorio.
-//
-//  Es necesario indicar a Spring Security que los excluya de los recursos restringidos.
-//  Una forma sería añadir la siguiente línea al fichero de configuración XML de Spring Security.
+  //  El inicio de sesión redirigirá por defecto al último recurso restringido solicitado de la sesión HTTP actual.
+  //  Aparentemente también ha cubierto los recursos JS/CSS/imagen de las páginas HTML generadas.
+  //  Cuando la propia página de inicio de sesión hace referencia exactamente a ese archivo JavaScript,
+  //  entonces se recordaría como el último recurso restringido solicitado y Spring Security redirigiría ciegamente a él
+  //  después de un inicio de sesión satisfactorio.
+  //
+  //  Es necesario indicar a Spring Security que los excluya de los recursos restringidos.
+  //  Una forma sería añadir la siguiente línea al fichero de configuración XML de Spring Security.
   @Bean
   public WebSecurityCustomizer webSecurityCustomizer() {
     return (web) -> web.ignoring().requestMatchers("/application/js/**");

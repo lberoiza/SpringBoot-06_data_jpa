@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org/">
+<head th:replace="~{/layouts/main :: head}">
+</head>
+<body>
+
+<header th:replace="~{/layouts/main :: header}"></header>
+
+<div class="container py-4">
+  <div class="card bg-danger text-white">
+    <div class="card-header">Error: Access not allowed</div>
+    <div class="card-body">
+      <h5 class="card-title">
+        <!--        I'm sorry <span th:text="${#httpServletRequest.remoteUser}"></span>.-->
+        I'm sorry <span th:text="${#authentication.getName()}"></span>.
+        You don't have permission to access to this page.
+      </h5>
+      <div class="py-4">
+        <a th:href="@{/client/list}" class="btn btn-outline-light" role="button">Go to Home</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer th:replace="~{/layouts/main :: footer}"></footer>
+</body>
+</html>
