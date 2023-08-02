@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org">
+<html xmlns:th="https://www.thymeleaf.org"  xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head th:replace="~{/layouts/main :: head}">
 </head>
 <body>
@@ -70,7 +70,7 @@
       </ul>
 
 
-      <a th:href="@{'/invoice/form/' + ${client.id}}"
+      <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/invoice/form/' + ${client.id}}"
          class="btn btn-info btn-xs">Create Invoice</a>
 
       <div th:if="${#lists.isEmpty(client.invoices)}"
@@ -89,7 +89,7 @@
             <th>Created at</th>
             <th>Last Update at</th>
             <th>Total</th>
-            <th class="text-center" colspan="2">Actions</th>
+            <th sec:authorize="hasRole('ROLE_ADMIN')" class="text-center" colspan="2">Actions</th>
           </tr>
           </thead>
           <tbody>
@@ -99,8 +99,8 @@
             <td th:text="${#dates.format(invoice.getCreatedAt(), 'dd.MM.yyyy')}"></td>
             <td th:text="${#dates.format(invoice.getUpdatedAt(), 'dd.MM.yyyy')}"></td>
             <td><span class="currency-euro" th:text="${#numbers.formatDecimal(invoice.getTotal(), 0, 'POINT', 2, 'COMMA')}"></span></td>
-            <td><a class="btn btn-success btn-xs" th:href="@{'/invoice/' + ${invoice.id}}">Show Details</a></td>
-            <td><a th:href="@{'/invoice/delete/' + ${invoice.id}}"
+            <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-success btn-xs" th:href="@{'/invoice/' + ${invoice.id}}">Show Details</a></td>
+            <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{'/invoice/delete/' + ${invoice.id}}"
                    class="btn btn-danger btn-xs"
                    onclick="return confirm('Are you sure, that you want to delete this Invoice?');">Delete</a></td>
           </tr>
