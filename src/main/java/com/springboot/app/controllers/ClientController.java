@@ -4,10 +4,14 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.springboot.app.services.IFileService;
+import com.springboot.app.util.paginator.AuthenticationUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +30,8 @@ import jakarta.validation.Valid;
 @RequestMapping("/client")
 @SessionAttributes("client")
 public class ClientController {
+
+  protected final Log log = LogFactory.getLog(this.getClass());
 
   @Autowired
   private IClientService clientService;
@@ -51,7 +57,16 @@ public class ClientController {
   }
 
   @RequestMapping(value = "/list", method = RequestMethod.GET)
-  public String getList(@RequestParam(name = "page", defaultValue = "0") int page, Model model) {
+  public String getList(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication) {
+
+    // Methodo de Inyeccion de Dependencias
+    if (authentication != null) {
+      log.info("Show List of User to: " + authentication.getName());
+    }
+
+    // Usando Application Context
+    Optional<Authentication> optionalAuthentication = AuthenticationUtils.getAutentication();
+    optionalAuthentication.ifPresent(auth -> log.info("From Application Context Show List of User to: " + auth.getName()));
 
     Pageable pageable = PageRequest.of(page, 4);
     model.addAttribute("title", "Client List");
