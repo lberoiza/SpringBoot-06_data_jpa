@@ -1,5 +1,7 @@
 package com.springboot.app.config;
 
+import com.springboot.app.auth.handlers.LoginSuccessHandler;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -23,6 +25,14 @@ public class SpringSecurityConfig {
       "/images/**",
       "/client/list"
   };
+
+  private final LoginSuccessHandler loginSuccessHandler;
+
+  @Autowired
+  public SpringSecurityConfig(LoginSuccessHandler loginSuccessHandler) {
+    this.loginSuccessHandler = loginSuccessHandler;
+  }
+
 
   @Bean
   public static BCryptPasswordEncoder passwordEncoder() {
@@ -57,6 +67,7 @@ public class SpringSecurityConfig {
                 .anyRequest().authenticated())
         .formLogin(form -> form
             .loginPage("/login")
+            .successHandler(loginSuccessHandler)
             .permitAll()
         )
         .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
