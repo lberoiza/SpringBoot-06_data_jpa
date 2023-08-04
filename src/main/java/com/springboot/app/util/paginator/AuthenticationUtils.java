@@ -7,8 +7,20 @@ import java.util.Optional;
 
 public class AuthenticationUtils {
 
-  public static Optional<Authentication> getAutentication(){
+  public static Optional<Authentication> getAutentication() {
     return Optional.of(SecurityContextHolder.getContext().getAuthentication());
   }
+
+  public static boolean hasRole(String roleName) {
+    boolean hasRole = false;
+    Optional<Authentication> optionalAuthentication = AuthenticationUtils.getAutentication();
+    if (optionalAuthentication.isPresent()) {
+      Authentication auth = optionalAuthentication.get();
+      hasRole = auth.getAuthorities().stream().anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals(roleName));
+    }
+
+    return hasRole;
+  }
+
 
 }
