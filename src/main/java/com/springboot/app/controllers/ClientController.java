@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import com.springboot.app.services.IFileService;
 import com.springboot.app.util.paginator.AuthenticationUtils;
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestWrapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -57,16 +59,14 @@ public class ClientController {
   }
 
   @RequestMapping(value = "/list", method = RequestMethod.GET)
-  public String getList(@RequestParam(name = "page", defaultValue = "0") int page, Model model, Authentication authentication) {
+  public String getList(
+      @RequestParam(name = "page", defaultValue = "0") int page,
+      Model model,
+      Authentication authentication,
+      HttpServletRequest httpServletRequest) {
 
-    // Methodo de Inyeccion de Dependencias
-    if (authentication != null) {
-      log.info("Show List of User to: " + authentication.getName());
-    }
-
-    // Usando Application Context
-    Optional<Authentication> optionalAuthentication = AuthenticationUtils.getAutentication();
-    optionalAuthentication.ifPresent(auth -> log.info("From Application Context Show List of User to: " + auth.getName()));
+    waysToValidateUser(authentication);
+    waysToGetRoles(authentication, httpServletRequest);
 
     Pageable pageable = PageRequest.of(page, 4);
     model.addAttribute("title", "Client List");
@@ -151,5 +151,41 @@ public class ClientController {
     }
     return "redirect:/client/list";
   }
+
+
+  private void waysToValidateUser(Authentication authentication) {
+
+    // 1. Método de Inyeccion de Dependencias
+    if (authentication != null) {
+      log.info("Show List of User to: " + authentication.getName());
+    }
+
+    // 2. Método Usando Application Context
+    Optional<Authentication> optionalAuthentication = AuthenticationUtils.getAutentication();
+    optionalAuthentication.ifPresent(auth -> log.info("From Application Context Show List of User to: " + auth.getName()));
+  }
+
+  private void waysToGetRoles(
+      Authentication authentication,
+      HttpServletRequest httpServletRequest) {
+
+    // 1. Método Usando Application Context
+    if(AuthenticationUtils.hasRole("ROLE_ADMIN")) {
+      log.info("Usando Application Context, Tienes el rol de ADMIN");
+    }
+
+    // 2. Método Usando SecurityContextHolderAwareRequestWrapper
+    SecurityContextHolderAwareRequestWrapper securityContext = new SecurityContextHolderAwareRequestWrapper(httpServletRequest, "ROLE_");
+    if (securityContext.isUserInRole("ADMIN")) {
+      log.info("Usando SecurityContextHolderAwareRequestWrapper, Tienes el rol de ADMIN");
+    }
+
+    // 3. Método Usando HttpServletRequest
+    if(httpServletRequest.isUserInRole("ROLE_ADMIN")) {
+      log.info("Usando HttpServletRequest, Tienes el rol de ADMIN");
+    }
+  }
+
+
 
 }
