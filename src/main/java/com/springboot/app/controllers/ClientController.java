@@ -58,6 +58,7 @@ public class ClientController {
     return "client/show_details";
   }
 
+//  @Secured({"ROLE_ADMIN"})
   @RequestMapping(value = "/list", method = RequestMethod.GET)
   public String getList(
       @RequestParam(name = "page", defaultValue = "0") int page,

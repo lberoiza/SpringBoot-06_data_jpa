@@ -13,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+//@EnableMethodSecurity(securedEnabled = true)
 @Configuration
 public class SpringSecurityConfig {
 
