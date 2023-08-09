@@ -1,16 +1,15 @@
 package com.springboot.app.config;
 
 import com.springboot.app.auth.handlers.LoginSuccessHandler;
+import com.springboot.app.services.JpaUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 //@EnableMethodSecurity(securedEnabled = true)
@@ -29,29 +28,25 @@ public class SpringSecurityConfig {
 
   private final LoginSuccessHandler loginSuccessHandler;
   private final BCryptPasswordEncoder passwordEncoder;
+  private final JpaUserDetailsService userDetailsService;
 
   @Autowired
-  public SpringSecurityConfig(LoginSuccessHandler loginSuccessHandler, BCryptPasswordEncoder passwordEncoder) {
+  public SpringSecurityConfig(
+      LoginSuccessHandler loginSuccessHandler,
+      BCryptPasswordEncoder passwordEncoder,
+      JpaUserDetailsService userDetailsService
+  ) {
     this.loginSuccessHandler = loginSuccessHandler;
     this.passwordEncoder = passwordEncoder;
+    this.userDetailsService = userDetailsService;
   }
 
-
-  @Bean
-  public UserDetailsService userDetailsService() throws Exception {
-
-    InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-
-    manager.createUser(User.withUsername("user")
-        .password(this.passwordEncoder.encode("user"))
-        .roles("USER").build());
-
-    manager.createUser(User.withUsername("admin")
-        .password(this.passwordEncoder.encode("admin"))
-        .roles("ADMIN", "USER").build());
-
-    return manager;
+  @Autowired
+  public void userDetailsService(AuthenticationManagerBuilder build) throws Exception {
+    build.userDetailsService(userDetailsService)
+        .passwordEncoder(passwordEncoder);
   }
+
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
