@@ -1,5 +1,18 @@
 /* Populate Tables */
 
+/* TABLE: USERS
+   Inserta usuarios en la base de datos
+   */
+INSERT INTO users (id, username, password, enabled) VALUES (1, 'admin', '$2a$10$PdNeOP5NuvYVbKjeijKrL.DOWA5lqM8ExWl4aV4B62tr/A9AsqeKu', 1);
+INSERT INTO users (id, username, password, enabled) VALUES (2, 'user', '$2a$10$yYBW41Km1tyLSMtWOkE7MurVT.PnF2p/U.0mtUF6hciKSf303A6d2', 1);
+
+/* TABLE: AUTHORITIES
+   Inserta Roles de usuarios en la base de datos
+   */
+INSERT INTO authorities (authority, user_id) VALUES ('ROLE_ADMIN', 1);
+INSERT INTO authorities (authority, user_id) VALUES ('ROLE_USER', 1);
+INSERT INTO authorities (authority, user_id) VALUES ('ROLE_USER', 2);
+
 /* TABLE: Clients */
 INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VALUES (1, 'Luis', 'Beroiza', 'luis.beroiza@email.com', '2023-05-26', '2023-05-26', '');
 INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VALUES (2, 'Cata', 'Salazar', 'pequitas@email.com','2023-05-26', '2023-05-26', '');
