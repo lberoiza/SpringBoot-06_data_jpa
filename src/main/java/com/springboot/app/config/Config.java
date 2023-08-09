@@ -29,11 +29,11 @@ public class Config implements WebMvcConfigurer {
         .addResourceLocations(getResourceLocationSrt(dirImages));
   }
 
-  private String getResourceHandlerSrt(String url){
+  private String getResourceHandlerSrt(String url) {
     return String.format("%s/**", url);
   }
 
-  private String getResourceLocationSrt(String dir){
+  private String getResourceLocationSrt(String dir) {
     return String.format("file:%s/", dir);
   }
 
