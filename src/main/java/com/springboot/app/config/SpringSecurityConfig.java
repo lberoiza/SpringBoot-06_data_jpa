@@ -23,7 +23,8 @@ public class SpringSecurityConfig {
       "/css/**",
       "/js/**",
       "/images/**",
-      "/client/list"
+      "/client/list",
+      "/locale"
   };
 
   private final LoginSuccessHandler loginSuccessHandler;
