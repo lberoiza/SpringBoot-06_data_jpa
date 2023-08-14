@@ -81,7 +81,7 @@ public class ClientController {
 
     Pageable pageable = PageRequest.of(page, 4);
     model.addAttribute("title",
-        messageSource.getMessage("text.controller.client.clientlist.title", null, locale)
+        messageSource.getMessage("text.client.clientlist.title", null, locale)
     );
 
     Page<Client> clients = clientService.findAll(pageable);
