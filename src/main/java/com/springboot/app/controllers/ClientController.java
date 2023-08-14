@@ -1,5 +1,6 @@
 package com.springboot.app.controllers;
 
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
@@ -9,6 +10,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -35,12 +37,19 @@ public class ClientController {
 
   protected final Log log = LogFactory.getLog(this.getClass());
 
-  @Autowired
   private IClientService clientService;
 
-  @Autowired
   private IFileService fileService;
 
+  private MessageSource messageSource;
+
+
+  @Autowired
+  public ClientController(IClientService clientService, IFileService fileService, MessageSource messageSource) {
+    this.clientService = clientService;
+    this.fileService = fileService;
+    this.messageSource = messageSource;
+  }
 
   @GetMapping(value = "/{id}")
   public String showClientDetails(@PathVariable(value = "id") Long clientId, Model model, RedirectAttributes flash) {
@@ -58,19 +67,22 @@ public class ClientController {
     return "client/show_details";
   }
 
-//  @Secured({"ROLE_ADMIN"})
+  //  @Secured({"ROLE_ADMIN"})
   @RequestMapping(value = "/list", method = RequestMethod.GET)
   public String getList(
       @RequestParam(name = "page", defaultValue = "0") int page,
       Model model,
       Authentication authentication,
-      HttpServletRequest httpServletRequest) {
+      HttpServletRequest httpServletRequest,
+      Locale locale) {
 
     waysToValidateUser(authentication);
     waysToGetRoles(authentication, httpServletRequest);
 
     Pageable pageable = PageRequest.of(page, 4);
-    model.addAttribute("title", "Client List");
+    model.addAttribute("title",
+        messageSource.getMessage("text.controller.client.clientlist.title", null, locale)
+    );
 
     Page<Client> clients = clientService.findAll(pageable);
     model.addAttribute("clients", clients);
@@ -171,7 +183,7 @@ public class ClientController {
       HttpServletRequest httpServletRequest) {
 
     // 1. Método Usando Application Context
-    if(AuthenticationUtils.hasRole("ROLE_ADMIN")) {
+    if (AuthenticationUtils.hasRole("ROLE_ADMIN")) {
       log.info("Usando Application Context, Tienes el rol de ADMIN");
     }
 
@@ -182,11 +194,10 @@ public class ClientController {
     }
 
     // 3. Método Usando HttpServletRequest
-    if(httpServletRequest.isUserInRole("ROLE_ADMIN")) {
+    if (httpServletRequest.isUserInRole("ROLE_ADMIN")) {
       log.info("Usando HttpServletRequest, Tienes el rol de ADMIN");
     }
   }
-
 
 
 }
