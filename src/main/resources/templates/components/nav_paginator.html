@@ -13,14 +13,13 @@
     <li th:class="${pageRender.hasPrevious ? 'page-item' : 'page-item disabled'}">
       <span class="page-link" th:if="${not pageRender.hasPrevious}" th:utext="#{text.paginator.previous}">&laquo;</span>
       <a class="page-link" th:if="${pageRender.hasPrevious}"
-         th:href="@{${pageRender.url}(page=${pageRender.currentPage -2}) }" th:utext="#{text.paginator.previous}">&laquo;</a>
+         th:href="@{${pageRender.url}(page=${pageRender.currentPage - 2}) }" th:utext="#{text.paginator.previous}">&laquo;</a>
     </li>
 
 
     <li th:class="${ item.isCurrentPage ? 'page-item active' : 'page-item' }" th:each="item : ${pageRender.pages}">
       <span class="page-link" th:if="${item.currentPage}" th:text="${item.pageNumber}"></span>
-      <a class="page-link" th:if="${not item.currentPage}" th:text="${item.pageNumber}"></a>
-    </li>
+      <a class="page-link" th:if="${not item.currentPage}" th:text="${item.pageNumber}" th:href="@{${pageRender.url}(page=${item.pageNumber - 1}) }"></a>
 
 
     <li th:class="${pageRender.hasNext ? 'page-item' : 'page-item disabled'}">
