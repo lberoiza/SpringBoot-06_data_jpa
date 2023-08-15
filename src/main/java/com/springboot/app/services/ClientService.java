@@ -14,45 +14,11 @@ import com.springboot.app.models.entity.Client;
 
 @Primary
 @Service("ClientService")
-public class ClientService implements IClientService {
+public class ClientService extends BaseCRUDService<Client, IClientDaoRepository> {
 
-  @Autowired
-  private IClientDaoRepository clientDao;
-
-
-  @Override
-  @Transactional(readOnly = true)
-  public Iterable<Client> findAll() {
-    return clientDao.findAll();
-  }
-
-  @Override
-  @Transactional(readOnly = true)
-  public Optional<Client> findById(Long id) {
-    return clientDao.findById(id);
-  }
-
-  @Override
   public Optional<Client> fetchClientByIdWithInvoices(Long id) {
-    return Optional.of(clientDao.fetchClientByIdWithInvoices(id));
+    return Optional.of(this.repository.fetchClientByIdWithInvoices(id));
   }
 
-  @Override
-  @Transactional
-  public Client saveOrUpdate(Client client) {
-    return clientDao.save(client);
-  }
-
-  @Override
-  @Transactional
-  public void delete(Long id) {
-    clientDao.deleteById(id);
-
-  }
-
-  @Override
-  public Page<Client> findAll(Pageable pageable) {
-    return clientDao.findAll(pageable);
-  }
 
 }

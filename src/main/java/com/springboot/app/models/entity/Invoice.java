@@ -5,16 +5,15 @@ import jakarta.validation.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Entity
 @Table(name = "invoices")
-public class Invoice implements Serializable {
+public class Invoice implements EntityTable {
 
-
+  @Serial
   private static final long serialVersionUID = -6305359088784275966L;
 
   @Id
@@ -125,11 +124,11 @@ public class Invoice implements Serializable {
     return this.invoiceItems.stream().reduce(0.0, (subtotal, item) -> subtotal + item.getAmount(), Double::sum);
   }
 
-  public Long getClientId(){
+  public Long getClientId() {
     return this.client.getId();
   }
 
-  public String getClientFullName(){
+  public String getClientFullName() {
     return this.client.getFullName();
   }
 

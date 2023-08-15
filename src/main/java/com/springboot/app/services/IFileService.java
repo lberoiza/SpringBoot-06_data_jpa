@@ -8,11 +8,11 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 
 public interface IFileService {
-  public Path getRootPathImages();
+  Path getRootPathImages();
 
-  public Resource getImageAsResource(String imageName) throws MalformedURLException, NoSuchFileException;
+  Resource getImageAsResource(String imageName) throws MalformedURLException, NoSuchFileException;
 
-  public String uploadImage(MultipartFile file);
+  String uploadImage(MultipartFile file);
 
-  public boolean deleteImage(String imageName);
+  boolean deleteImage(String imageName);
 }

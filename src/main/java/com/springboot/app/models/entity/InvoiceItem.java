@@ -2,12 +2,13 @@ package com.springboot.app.models.entity;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
+import java.io.Serial;
 
 @Entity
 @Table(name = "invoice_items")
-public class InvoiceItem implements Serializable {
+public class InvoiceItem implements EntityTable {
 
+  @Serial
   private static final long serialVersionUID = 7273747430179859851L;
 
   @Id

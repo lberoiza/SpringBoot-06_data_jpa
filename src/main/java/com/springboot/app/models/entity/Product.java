@@ -2,13 +2,14 @@ package com.springboot.app.models.entity;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
+import java.io.Serial;
 import java.util.Date;
 
 @Entity
 @Table(name = "products")
-public class Product implements Serializable {
+public class Product implements EntityTable {
 
+  @Serial
   private static final long serialVersionUID = -1335327352994329233L;
 
   @Id

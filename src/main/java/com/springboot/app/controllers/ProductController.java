@@ -1,7 +1,7 @@
 package com.springboot.app.controllers;
 
 import com.springboot.app.models.entity.Product;
-import com.springboot.app.services.IProductService;
+import com.springboot.app.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,9 +15,9 @@ import java.util.List;
 @RequestMapping("/product")
 public class ProductController {
 
-  private final IProductService productService;
+  private final ProductService productService;
 
-  public ProductController(@Autowired IProductService pService){
+  public ProductController(@Autowired ProductService pService){
     this.productService = pService;
   }
 

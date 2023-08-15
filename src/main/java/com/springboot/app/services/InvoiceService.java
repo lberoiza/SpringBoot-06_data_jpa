@@ -9,32 +9,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-public class InvoiceService implements IInvoiceService {
+public class InvoiceService extends BaseCRUDService<Invoice, IInvoiceDao> {
 
-  @Autowired
-  private IInvoiceDao invoiceDao;
-
-  @Override
-  public Optional<Invoice> findById(Long id) {
-    return invoiceDao.findById(id);
-  }
-
-  @Override
-  @Transactional
-  public void saveInvoice(Invoice invoice) {
-    invoiceDao.save(invoice);
-  }
-
-  @Override
-  @Transactional
-  public void deleteById(Long id) {
-    invoiceDao.deleteById(id);
-  }
-
-  @Override
   @Transactional(readOnly = true)
   public Optional<Invoice> fetchInvoiceWithClientWithInvoiceItemsWithProduct(Long invoiceId) {
-    return Optional.of(invoiceDao.fetchInvoiceWithClientWithInvoiceItemsWithProduct(invoiceId));
+    return Optional.of(repository.fetchInvoiceWithClientWithInvoiceItemsWithProduct(invoiceId));
   }
 
 }

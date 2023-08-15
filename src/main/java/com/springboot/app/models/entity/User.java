@@ -4,13 +4,12 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class User implements Serializable {
+public class User implements EntityTable {
 
   @Serial
   private static final long serialVersionUID = 7708007680055356034L;

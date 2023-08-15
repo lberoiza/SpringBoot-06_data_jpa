@@ -2,17 +2,15 @@ package com.springboot.app.models.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import org.springframework.security.authentication.AuthenticationManager;
 
 import java.io.Serial;
-import java.io.Serializable;
 
 @Entity
 @Table(
     name = "authorities",
     uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "authority"})}
 )
-public class Role implements Serializable {
+public class Role implements EntityTable {
   @Serial
   private static final long serialVersionUID = 7921655764507873733L;
 

@@ -4,6 +4,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 
+import com.springboot.app.services.ClientService;
 import com.springboot.app.services.IFileService;
 import com.springboot.app.util.paginator.AuthenticationUtils;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,7 +26,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.springboot.app.models.entity.Client;
-import com.springboot.app.services.IClientService;
 import com.springboot.app.util.paginator.PageRender;
 
 import jakarta.validation.Valid;
@@ -37,7 +37,7 @@ public class ClientController {
 
   protected final Log log = LogFactory.getLog(this.getClass());
 
-  private final IClientService clientService;
+  private final ClientService clientService;
 
   private final IFileService fileService;
 
@@ -45,7 +45,7 @@ public class ClientController {
 
 
   @Autowired
-  public ClientController(IClientService clientService,
+  public ClientController(ClientService clientService,
                           IFileService fileService,
                           MessageSource messageSource) {
     this.clientService = clientService;
@@ -183,7 +183,7 @@ public class ClientController {
             String successImageDeletion = this.messageSource.getMessage("text.client.flash.foto.delete.success", null, locale);
             flash.addFlashAttribute("info", String.format(successImageDeletion, client.getImage()));
           }
-          clientService.delete(id);
+          clientService.deleteById(id);
           String successClientDeletion = this.messageSource.getMessage("text.client.flash.delete.success", null, locale);
           flash.addFlashAttribute("success", successClientDeletion);
         },

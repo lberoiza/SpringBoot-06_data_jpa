@@ -1,7 +1,6 @@
 package com.springboot.app.models.entity;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,7 +15,7 @@ import jakarta.validation.constraints.Past;
 
 @Entity
 @Table(name = "clients")
-public class Client implements Serializable {
+public class Client implements EntityTable {
 
   @Serial
   private static final long serialVersionUID = -7205843364359501687L;

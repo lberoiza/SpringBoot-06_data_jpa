@@ -4,9 +4,9 @@ import com.springboot.app.models.entity.Client;
 import com.springboot.app.models.entity.Invoice;
 import com.springboot.app.models.entity.InvoiceItem;
 import com.springboot.app.models.entity.Product;
-import com.springboot.app.services.IClientService;
-import com.springboot.app.services.IInvoiceService;
-import com.springboot.app.services.IProductService;
+import com.springboot.app.services.ClientService;
+import com.springboot.app.services.InvoiceService;
+import com.springboot.app.services.ProductService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,18 +30,18 @@ public class InvoiceController {
   private final Logger logger = LoggerFactory.getLogger(getClass());
 
 
-  private final IClientService clientService;
+  private final ClientService clientService;
 
-  private final IProductService productService;
+  private final ProductService productService;
 
-  private final IInvoiceService invoiceService;
+  private final InvoiceService invoiceService;
 
   private final MessageSource messageSource;
 
   @Autowired
-  public InvoiceController(IClientService clientService,
-                           IProductService productService,
-                           IInvoiceService invoiceService,
+  public InvoiceController(ClientService clientService,
+                           ProductService productService,
+                           InvoiceService invoiceService,
                            MessageSource messageSource) {
     this.clientService = clientService;
     this.productService = productService;
@@ -148,7 +148,7 @@ public class InvoiceController {
       logger.info(infoStr);
     }
 
-    this.invoiceService.saveInvoice(invoice);
+    this.invoiceService.saveOrUpdate(invoice);
     status.setComplete();
 
     String successStr = this.messageSource.getMessage("text.invoice.flash.new.success", null, locale);
