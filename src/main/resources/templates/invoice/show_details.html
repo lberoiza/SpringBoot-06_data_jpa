@@ -14,16 +14,17 @@
 
       <h4 class="card-title">
         <a class="btn btn-success" th:href="@{'/client/' + ${invoice.clientId}}"
-           th:text="'Go to ' + ${invoice.clientFullName} + ' page'"></a>
+           th:utext="#{text.global.back}"></a>
       </h4>
 
       <ul class="list-group my-2">
-        <li class="list-group-item list-group-item-primary">Client Details</li>
+        <li class="list-group-item list-group-item-primary" th:text="#{text.invoice.show.data.client}">Client Details
+        </li>
 
         <li class="list-group-item">
           <div class="row">
             <div class="col-12 col-sm-2">
-              <label>Client: </label>
+              <label th:text="#{text.invoice.form.client}">Client: </label>
             </div>
             <div class="col-12 col-sm-10">
               <span th:text="${invoice.clientFullName}"></span>
@@ -34,7 +35,7 @@
         <li class="list-group-item">
           <div class="row">
             <div class="col-12 col-sm-2">
-              <label>Email: </label>
+              <label th:text="#{text.templates.client.email}">Email: </label>
             </div>
             <div class="col-12 col-sm-10">
               <span th:text="${invoice.client.email}"></span>
@@ -46,12 +47,14 @@
 
       <ul class="list-group my-2">
 
-        <li class="list-group-item list-group-item-primary">Invoice Details</li>
+        <li class="list-group-item list-group-item-primary" th:text="#{text.invoice.show.data.invoice}">Invoice
+          Details
+        </li>
 
         <li class="list-group-item">
           <div class="row">
             <div class="col-12 col-sm-2">
-              <label>Created at: </label>
+              <label th:text="#{text.client.invoice.createdAt}">Created at: </label>
             </div>
             <div class="col-12 col-sm-10">
               <span th:text="${#dates.format(invoice.getCreatedAt(), 'dd.MM.yyyy')}"></span>
@@ -62,7 +65,7 @@
         <li class="list-group-item">
           <div class="row">
             <div class="col-12 col-sm-2">
-              <label>Description: </label>
+              <label th:text="#{text.client.invoice.description}">Description: </label>
             </div>
             <div class="col-12 col-sm-10">
               <span th:text="${invoice.description}"></span>
@@ -73,7 +76,7 @@
         <li class="list-group-item">
           <div class="row">
             <div class="col-12 col-sm-2">
-              <label>Total: </label>
+              <label th:text="#{text.invoice.form.total}">Total: </label>
             </div>
             <div class="col-12 col-sm-10">
               <span class="currency-euro"
@@ -85,12 +88,13 @@
         <li class="list-group-item">
           <div class="row">
             <div class="col-12 col-sm-2">
-              <label>Delete: </label>
+              <label th:text="#{text.client.invoice.delete}">Delete: </label>
             </div>
             <div class="col-12 col-sm-10">
               <a th:href="@{'/invoice/delete/' + ${invoice.id}}"
                  class="btn btn-danger btn-xs"
-                 onclick="return confirm('Are you sure, that you want to delete this Invoice?');">Delete</a>
+                 onclick="return confirm('Are you sure, that you want to delete this Invoice?');"
+                 th:text="#{text.client.invoice.delete}">Delete</a>
             </div>
           </div>
         </li>
@@ -100,11 +104,11 @@
       <table class="table table-bordered table-striped table-hover my-4">
         <thead class="bg-primary text-white">
         <tr>
-          <th>Product Nr.</th>
-          <th>Name</th>
-          <th>Price</th>
-          <th>Quantity</th>
-          <th>Amount</th>
+          <th th:text="#{text.invoice.form.productNr}">Product Nr.</th>
+          <th th:text="#{text.invoice.form.item.productName}">Name</th>
+          <th th:text="#{text.invoice.form.item.price}">Price</th>
+          <th th:text="#{text.invoice.form.item.quantity}">Quantity</th>
+          <th th:text="#{text.invoice.form.item.total}">Amount</th>
         </tr>
         </thead>
         <tbody>
@@ -123,7 +127,7 @@
           <td></td>
           <td></td>
           <td></td>
-          <td class="bg-info text-white text-end">Total</td>
+          <td class="bg-info text-white text-end" th:text="#{text.invoice.form.total}">Total</td>
           <td class="bg-info text-white"><span class="currency-euro"
                                                th:text="${#numbers.formatDecimal(invoice.total, 0, 'POINT', 2, 'COMMA')}"></span>
           </td>
@@ -132,20 +136,20 @@
       </table>
 
       <div class="card border-info mb-3" style="max-width: 20rem;">
-        <div class="card-header">Observations</div>
+        <div class="card-header" th:text="#{text.invoice.form.obs}">Observations</div>
         <div class="card-body">
-          <h4 class="card-title" th:if="${#strings.isEmpty(invoice.obs)}">The Invoice has not observations</h4>
+          <h4 class="card-title" th:if="${#strings.isEmpty(invoice.obs)}" th:text="#{text.invoice.show.no.obs}">The
+            Invoice has not observations</h4>
           <p class="card-text" th:text="${invoice.obs}" th:if="${not #strings.isEmpty(invoice.obs)}"></p>
         </div>
       </div>
 
       <a class="btn btn-success" th:href="@{'/client/' + ${invoice.clientId}}"
-         th:text="'Go to ' + ${invoice.clientFullName} + ' page'"></a>
+         th:utext="#{text.global.back}"></a>
 
     </div>
 
   </div>
-
 
 
 </div>

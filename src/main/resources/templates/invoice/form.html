@@ -12,7 +12,7 @@
 
       <h4 class="card-title">
         <a class="btn btn-success" th:href="@{'/client/' + ${invoice.clientId}}"
-           th:text="'Go to ' + ${invoice.clientFullName} + ' page'"></a>
+           th:utext="#{text.global.back}"></a>
       </h4>
 
 
@@ -22,7 +22,7 @@
             method="POST" enctype="multipart/form-data">
 
         <div class="form-group row mb-3">
-          <label class="col-sm-2 col-form-label" for="client">Client</label>
+          <label class="col-sm-2 col-form-label" for="client" th:text="#{text.invoice.form.client}">Client</label>
           <div class="col-sm-6">
             <input type="text" id="client" class="form-control" disabled="disabled"
                    th:value="${invoice.client.fullName}"/>
@@ -30,7 +30,7 @@
         </div>
 
         <div class="form-group row mb-3">
-          <label class="col-sm-2 col-form-label" for="description">Description</label>
+          <label class="col-sm-2 col-form-label" for="description" th:text="#{text.invoice.form.description}">Description</label>
           <div class="col-sm-6">
             <input type="text" id="description" class="form-control"
                    th:field="*{description}" th:errorclass="'is-invalid'"/> <small
@@ -40,7 +40,7 @@
         </div>
 
         <div class="form-group row mb-3">
-          <label class="col-sm-2 col-form-label" for="obs">Observation</label>
+          <label class="col-sm-2 col-form-label" for="obs" th:text="#{text.invoice.form.obs}">Observation</label>
           <div class="col-sm-6">
             <textarea id="obs" class="form-control"
                       th:field="*{obs}" th:errorclass="'is-invalid'">
@@ -50,7 +50,7 @@
         </div>
 
         <div class="form-group row mb-3">
-          <label class="col-sm-2 col-form-label" for="product">Product</label>
+          <label class="col-sm-2 col-form-label" for="product" th:text="#{text.invoice.form.item.productName}">Product</label>
           <div class="col-9 col-sm-5">
             <datalist id="datalist-product"></datalist>
             <input type="search" id="product" list="datalist-product" autocomplete="off"
@@ -58,7 +58,7 @@
             <small class="form-text text-danger" id="product_error"></small>
           </div>
           <div class="col-1 col-sm-1">
-            <label class="btn btn-info" id="add-product">Add</label>
+            <label class="btn btn-info" id="add-product" th:text="#{text.invoice.form.item.add}">Add</label>
           </div>
         </div>
 
@@ -66,11 +66,11 @@
           <table id="table-invoice" class="table table-striped table-sm table-hover">
             <thead class="bg-primary text-white">
             <tr>
-              <th>Product</th>
-              <th>Price</th>
-              <th>Quantity</th>
-              <th>Total</th>
-              <th>Delete</th>
+              <th th:text="#{text.invoice.form.item.productName}">Product</th>
+              <th th:text="#{text.invoice.form.item.price}">Price</th>
+              <th th:text="#{text.invoice.form.item.quantity}">Quantity</th>
+              <th th:text="#{text.invoice.form.item.total}">Total</th>
+              <th th:text="#{text.invoice.form.item.delete}">Delete</th>
             </tr>
             </thead>
             <tbody id="table-invoice-tbody"></tbody>
@@ -78,7 +78,7 @@
             <tr>
               <th></th>
               <th></th>
-              <th class="text-end">Invoice Total:</th>
+              <th class="text-end" th:text="#{text.invoice.form.total}">Invoice Total:</th>
               <th><span id="invoice-total" class="text-end currency-euro">0</span></th>
               <th></th>
             </tr>
@@ -89,7 +89,7 @@
 
         <div class="form-group row">
           <div class="col-sm-1 offset-sm-2">
-            <input type="submit" class="btn btn-primary" value="Save"/>
+            <input type="submit" class="btn btn-primary" th:value="#{text.form.button.save}"/>
           </div>
         </div>
       </form>
