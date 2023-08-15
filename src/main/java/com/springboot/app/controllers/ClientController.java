@@ -37,32 +37,39 @@ public class ClientController {
 
   protected final Log log = LogFactory.getLog(this.getClass());
 
-  private IClientService clientService;
+  private final IClientService clientService;
 
-  private IFileService fileService;
+  private final IFileService fileService;
 
-  private MessageSource messageSource;
+  private final MessageSource messageSource;
 
 
   @Autowired
-  public ClientController(IClientService clientService, IFileService fileService, MessageSource messageSource) {
+  public ClientController(IClientService clientService,
+                          IFileService fileService,
+                          MessageSource messageSource) {
     this.clientService = clientService;
     this.fileService = fileService;
     this.messageSource = messageSource;
   }
 
   @GetMapping(value = "/{id}")
-  public String showClientDetails(@PathVariable(value = "id") Long clientId, Model model, RedirectAttributes flash) {
+  public String showClientDetails(@PathVariable(value = "id") Long clientId,
+                                  Model model,
+                                  RedirectAttributes flash,
+                                  Locale locale) {
 
     Optional<Client> result = clientService.fetchClientByIdWithInvoices(clientId);
 
     if (result.isEmpty()) {
-      flash.addFlashAttribute("error", String.format("The Client with id %d was not found", clientId));
+      String errorStr = this.messageSource.getMessage("text.client.flash.db.error", null, locale);
+      flash.addFlashAttribute("error", String.format(errorStr, clientId));
       return "redirect:/client/list";
     }
 
     Client client = result.get();
-    model.addAttribute("title", String.format("Details of '%s'", client.getFullName()));
+    String titleStr = this.messageSource.getMessage("text.client.details.title", null, locale);
+    model.addAttribute("title", String.format(titleStr, client.getFullName()));
     model.addAttribute("client", client);
     return "client/show_details";
   }
@@ -77,12 +84,11 @@ public class ClientController {
       Locale locale) {
 
     waysToValidateUser(authentication);
-    waysToGetRoles(authentication, httpServletRequest);
+    waysToGetRoles(httpServletRequest);
 
     Pageable pageable = PageRequest.of(page, 4);
-    model.addAttribute("title",
-        messageSource.getMessage("text.client.clientlist.title", null, locale)
-    );
+    String title = this.messageSource.getMessage("text.client.clientlist.title", null, locale);
+    model.addAttribute("title", title);
 
     Page<Client> clients = clientService.findAll(pageable);
     model.addAttribute("clients", clients);
@@ -94,24 +100,31 @@ public class ClientController {
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.GET)
-  public String showForm(Map<String, Object> model) {
-    model.put("title", "Create Client");
+  public String showForm(Map<String, Object> model, Locale locale) {
+    String title = this.messageSource.getMessage("text.client.new", null, locale);
+    model.put("title", title);
     model.put("client", new Client());
     return "client/form";
   }
 
   @RequestMapping(value = "/form", method = RequestMethod.POST)
-  public String createClient(@Valid Client client, BindingResult result, Model model, @RequestParam("file") MultipartFile image, RedirectAttributes flash,
-                             SessionStatus status) {
+  public String createClient(@Valid Client client,
+                             BindingResult result,
+                             Model model,
+                             @RequestParam("file") MultipartFile image,
+                             RedirectAttributes flash,
+                             SessionStatus status,
+                             Locale locale) {
 
     if (!image.isEmpty()) {
+      String messageInfo = this.messageSource.getMessage("text.client.flash.foto.upload.success", null, locale);
       try {
         String imageName = fileService.uploadImage(image);
         if (client.hasImage()) {
           fileService.deleteImage(client.getImage());
         }
         client.setImage(imageName);
-        String successStr = String.format("The Image '%s' was successfully uploaded", imageName);
+        String successStr = String.format(messageInfo, imageName);
         flash.addFlashAttribute("info", successStr);
       } catch (IllegalArgumentException ex) {
         model.addAttribute("error", ex.getMessage());
@@ -120,48 +133,65 @@ public class ClientController {
 
 
     if (result.hasErrors()) {
-      model.addAttribute("title", "Create Client");
-      model.addAttribute("error", "Please full all fields.");
+      String titleStr = this.messageSource.getMessage("text.client.new", null, locale);
+      String errorStr = this.messageSource.getMessage("text.client.form.error", null, locale);
+      model.addAttribute("title", titleStr);
+      model.addAttribute("error", errorStr);
       return "client/form";
     }
 
-    String operationTypString = client.hasValidId() ? "updated" : "created";
+    String operationMessage = client.hasValidId() ? "text.client.flash.edit.success" : "text.client.flash.new.success";
+    String successMessage = this.messageSource.getMessage(operationMessage, null, locale);
 
     client = clientService.saveOrUpdate(client);
     status.setComplete();
-    flash.addFlashAttribute("success", String.format("The Client was successful %s", operationTypString));
+    flash.addFlashAttribute("success", successMessage);
     flash.addFlashAttribute("client", client);
     return "redirect:/client/" + client.getId();
 
   }
 
   @RequestMapping(value = "/form/{id}", method = RequestMethod.GET)
-  public String editClient(@PathVariable Long id, Model model, RedirectAttributes flash) {
+  public String editClient(
+      @PathVariable Long id,
+      Model model,
+      RedirectAttributes flash,
+      Locale locale) {
     Optional<Client> result = clientService.findById(id);
 
     if (result.isPresent()) {
+      String title = this.messageSource.getMessage("text.client.form.title.edit", null, locale);
+      model.addAttribute("title", title);
       model.addAttribute("client", result.get());
-      model.addAttribute("title", "Edit Client");
       return "client/form";
     }
 
-    flash.addFlashAttribute("error", "The Client doesnt exist in der Database.");
+    String error = this.messageSource.getMessage("text.client.flash.db.error", null, locale);
+    flash.addFlashAttribute("error", String.format(error, id));
     return "redirect:/client/list";
   }
 
   @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
-  public String deleteClient(@PathVariable Long id, RedirectAttributes flash) {
-    Optional<Client> result = clientService.findById(id);
-    if (result.isPresent()) {
-      Client client = result.get();
-      if (fileService.deleteImage(client.getImage())) {
-        flash.addFlashAttribute("info", "The Image of the Client was successful deleted.");
-      }
-      clientService.delete(id);
-      flash.addFlashAttribute("success", "The Client was successful deleted.");
-    } else {
-      flash.addFlashAttribute("error", "The Client was not found in the BD.");
-    }
+  public String deleteClient(@PathVariable Long id,
+                             RedirectAttributes flash,
+                             Locale locale) {
+    Optional<Client> clientOptional = clientService.findById(id);
+
+    clientOptional.ifPresentOrElse(
+        client -> {
+          if (fileService.deleteImage(client.getImage())) {
+            String successImageDeletion = this.messageSource.getMessage("text.client.flash.foto.delete.success", null, locale);
+            flash.addFlashAttribute("info", String.format(successImageDeletion, client.getImage()));
+          }
+          clientService.delete(id);
+          String successClientDeletion = this.messageSource.getMessage("text.client.flash.delete.success", null, locale);
+          flash.addFlashAttribute("success", successClientDeletion);
+        },
+        () -> {
+          String errorCustomerDeletion = this.messageSource.getMessage("text.client.flash.db.error", null, locale);
+          flash.addFlashAttribute("error", String.format(errorCustomerDeletion, id));
+        }
+    );
     return "redirect:/client/list";
   }
 
@@ -178,9 +208,7 @@ public class ClientController {
     optionalAuthentication.ifPresent(auth -> log.info("From Application Context Show List of User to: " + auth.getName()));
   }
 
-  private void waysToGetRoles(
-      Authentication authentication,
-      HttpServletRequest httpServletRequest) {
+  private void waysToGetRoles(HttpServletRequest httpServletRequest) {
 
     // 1. Método Usando Application Context
     if (AuthenticationUtils.hasRole("ROLE_ADMIN")) {
