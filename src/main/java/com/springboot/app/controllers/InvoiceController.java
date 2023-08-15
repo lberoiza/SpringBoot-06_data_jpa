@@ -11,6 +11,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.support.SessionStatus;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.Locale;
 import java.util.Optional;
 
 @Controller
@@ -34,29 +36,38 @@ public class InvoiceController {
 
   private final IInvoiceService invoiceService;
 
+  private final MessageSource messageSource;
 
-  public InvoiceController(@Autowired IClientService clientService,
-                           @Autowired IProductService productService,
-                           @Autowired IInvoiceService invoiceService) {
+  @Autowired
+  public InvoiceController(IClientService clientService,
+                           IProductService productService,
+                           IInvoiceService invoiceService,
+                           MessageSource messageSource) {
     this.clientService = clientService;
     this.productService = productService;
     this.invoiceService = invoiceService;
+    this.messageSource = messageSource;
   }
 
 
   @GetMapping("/{invoiceId}")
-  public String showInvoice(@PathVariable(name = "invoiceId") Long invoiceId, Model model, RedirectAttributes flash) {
+  public String showInvoice(@PathVariable(name = "invoiceId") Long invoiceId,
+                            Model model,
+                            RedirectAttributes flash,
+                            Locale locale) {
     Optional<Invoice> optionalInvoice = this.invoiceService.fetchInvoiceWithClientWithInvoiceItemsWithProduct(invoiceId);
 
     if (optionalInvoice.isEmpty()) {
-      String error = String.format("The Invoice (%d) was not found in System.", invoiceId);
+      String messageStr = this.messageSource.getMessage("text.invoice.flash.db.error", null, locale);
+      String error = String.format(messageStr, invoiceId);
       flash.addFlashAttribute("error", error);
       return "redirect:/client/list";
     }
 
     Invoice invoice = optionalInvoice.get();
 
-    String title = String.format("Invoice nr: %d of %s", invoice.getId(), invoice.getClientFullName());
+    String titleStr = this.messageSource.getMessage("text.invoice.show.title", null, locale);
+    String title = String.format(titleStr, invoice.getId(), invoice.getClientFullName());
     model.addAttribute("title", title);
     model.addAttribute("invoice", invoice);
     return "invoice/show_details";
@@ -66,12 +77,14 @@ public class InvoiceController {
   @GetMapping("/form/{clientId}")
   public String createInvoice(@PathVariable(value = "clientId") Long clientId,
                               Model model,
-                              RedirectAttributes flash) {
+                              RedirectAttributes flash,
+                              Locale locale) {
 
     Optional<Client> clientOptional = clientService.findById(clientId);
 
     if (clientOptional.isEmpty()) {
-      String error = String.format("The Client (%d) was not found in System.", clientId);
+      String errorMessage = this.messageSource.getMessage("text.client.flash.db.error", null, locale);
+      String error = String.format(errorMessage, clientId);
       flash.addFlashAttribute("error", error);
       return "redirect:/client/list";
     }
@@ -79,7 +92,8 @@ public class InvoiceController {
     Invoice invoice = new Invoice();
     invoice.setClient(clientOptional.get());
 
-    String title = String.format("New Invoice of %s", invoice.getClientFullName());
+    String newInvoceStr = this.messageSource.getMessage("text.invoice.form.title", null, locale);
+    String title = String.format(newInvoceStr, invoice.getClientFullName());
     model.addAttribute("title", title);
     model.addAttribute("invoice", invoice);
 
@@ -94,19 +108,22 @@ public class InvoiceController {
                             @RequestParam(name = "product_id[]", required = false) Long[] productIds,
                             @RequestParam(name = "product_quantity[]", required = false) Integer[] productQuantities,
                             RedirectAttributes flash,
-                            SessionStatus status) {
+                            SessionStatus status,
+                            Locale locale) {
+
+    String newInvoceStr = this.messageSource.getMessage("text.invoice.form.title", null, locale);
+    String title = String.format(newInvoceStr, invoice.getClientFullName());
 
     if (validation.hasErrors()) {
-      String title = String.format("New Invoice of %s", invoice.getClientFullName());
       model.addAttribute("title", title);
       return "invoice/form";
     }
 
 
     if (productIds == null || productIds.length == 0) {
-      String title = String.format("New Invoice of %s", invoice.getClientFullName());
+      String notProductStr = this.messageSource.getMessage("text.invoice.show.no.position", null, locale);
       model.addAttribute("title", title);
-      model.addAttribute("error", "There are not products in the invoice.");
+      model.addAttribute("error", notProductStr);
       return "invoice/form";
     }
 
@@ -134,18 +151,22 @@ public class InvoiceController {
     this.invoiceService.saveInvoice(invoice);
     status.setComplete();
 
-    String flashString = String.format("The Invoice (%s) was successfully created for %s", invoice.getId(), invoice.getClientFullName());
+    String successStr = this.messageSource.getMessage("text.invoice.flash.new.success", null, locale);
+    String flashString = String.format(successStr, invoice.getId(), invoice.getClientFullName());
     flash.addFlashAttribute("success", flashString);
 
     return "redirect:/client/" + invoice.getClientId();
   }
 
   @GetMapping("delete/{invoiceId}")
-  public String deleteInvoice(@PathVariable Long invoiceId, RedirectAttributes flash) {
+  public String deleteInvoice(@PathVariable Long invoiceId,
+                              RedirectAttributes flash,
+                              Locale locale) {
     Optional<Invoice> optionalInvoice = this.invoiceService.findById(invoiceId);
 
     if (optionalInvoice.isEmpty()) {
-      String errorStr = String.format("The Invoice (%s) is not in system", invoiceId);
+      String messageStr = this.messageSource.getMessage("text.invoice.flash.db.error", null, locale);
+      String errorStr = String.format(messageStr, invoiceId);
       flash.addFlashAttribute("error", errorStr);
       return "redirect:/client/list";
     }
@@ -153,7 +174,8 @@ public class InvoiceController {
     Invoice invoice = optionalInvoice.get();
     this.invoiceService.deleteById(invoiceId);
 
-    String successStr = String.format("The Invoice (%d) \"%s\" of %s was deleted.", invoice.getId(), invoice.getDescription(), invoice.getClientFullName());
+    String successMessage = this.messageSource.getMessage("text.invoice.flash.delete.success", null, locale);
+    String successStr = String.format(successMessage, invoice.getId(), invoice.getClientFullName());
     flash.addFlashAttribute("success", successStr);
     return "redirect:/client/" + invoice.getClientId();
   }
