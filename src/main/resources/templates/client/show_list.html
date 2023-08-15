@@ -12,8 +12,10 @@
     <div class="card-body">
 
       <h4 class="card-title">
-        <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/client/form}" class="btn btn-success">Add new
-          client</a>
+        <a sec:authorize="hasRole('ROLE_ADMIN')"
+           th:href="@{/client/form}"
+           class="btn btn-success"
+           th:text="#{text.client.new}">Add new client</a>
       </h4>
 
 
@@ -26,25 +28,39 @@
           <th th:text="#{text.templates.client.email}">email</th>
           <th th:text="#{text.templates.client.createdAt}">Created At</th>
           <th th:text="#{text.templates.client.updatedAt}">Updated At</th>
-          <th th:text="#{text.templates.client.actions}" sec:authorize="hasRole('ROLE_ADMIN')" colspan="3" class="text-center">Actions</th>
+          <th th:text="#{text.templates.client.actions}" sec:authorize="hasRole('ROLE_ADMIN')" colspan="3"
+              class="text-center">Actions
+          </th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="client: ${clients}">
-          <td sec:authorize="hasRole('ROLE_USER')"><a class="btn btn-primary btn-xs" th:href="@{'/client/' + ${client.id}}"
-                 th:text="${client.id}"></a></td>
+          <td sec:authorize="hasRole('ROLE_USER')">
+            <a class="btn btn-primary btn-xs"
+               th:href="@{'/client/' + ${client.id}}"
+               th:text="${client.id}"></a>
+          </td>
           <td th:text="${client.name}"></td>
           <td th:text="${client.surname}"></td>
           <td th:text="${client.email}"></td>
           <td th:text="${#dates.format(client.createdAt, 'dd.MM.yyyy')}"></td>
           <td th:text="${#dates.format(client.updatedAt, 'dd.MM.yyyy')}"></td>
-          <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{'/invoice/form/' + ${client.id}}"
-                 class="btn btn-info btn-xs">Create Invoice</a></td>
-          <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{'/client/form/' + ${client.id}}"
-                 class="btn btn-primary btn-xs">Edit</a></td>
-          <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{'/client/delete/' + ${client.id}}"
-                 class="btn btn-danger btn-xs"
-                 onclick="return confirm('Are you sure, that you want to delete this client?');">Delete</a></td>
+          <td sec:authorize="hasRole('ROLE_ADMIN')">
+            <a th:href="@{'/invoice/form/' + ${client.id}}"
+               class="btn btn-info btn-xs"
+               th:text="#{text.client.invoice.new}">Create Invoice</a>
+          </td>
+          <td sec:authorize="hasRole('ROLE_ADMIN')">
+            <a th:href="@{'/client/form/' + ${client.id}}"
+               class="btn btn-primary btn-xs"
+               th:text="#{text.client.edit}">Edit</a>
+          </td>
+          <td sec:authorize="hasRole('ROLE_ADMIN')">
+            <a th:href="@{'/client/delete/' + ${client.id}}"
+               class="btn btn-danger btn-xs"
+               onclick="return confirm('Are you sure, that you want to delete this client?');"
+               th:text="#{text.client.delete}">Delete</a>
+          </td>
         </tr>
         </tbody>
       </table>

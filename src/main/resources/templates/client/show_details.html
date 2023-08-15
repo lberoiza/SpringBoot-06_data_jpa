@@ -13,21 +13,21 @@
     <div class="card-body">
 
       <h4 class="card-title">
-        <a class="btn btn-success" th:href="@{/client/list}">Go back to List of Clients</a>
+        <a class="btn btn-success" th:href="@{/client/list}" th:utext="#{text.global.back}">Go back to List of Clients</a>
       </h4>
 
       <img th:if="${#strings.length(client.image) > 0}" th:src="@{'/images/'+ ${client.image}}"
            th:alt="${client.getImage()}"
-           class="img-thumbnail rounded float-sm-start" style="max-width: 25%;">
+           class="img-thumbnail rounded float-sm-start my-4" style="max-width: 25%;">
 
       <ul class="list-group my-4">
 
-        <li class="list-group-item list-group-item-primary">Client Details</li>
+        <li class="list-group-item list-group-item-primary" th:text="#{text.invoice.show.data.client}">Client Details</li>
 
         <li class="list-group-item">
           <div class="row">
             <div class="col-12 col-sm-2">
-              <label>Name: </label>
+              <label th:text="#{text.template.client.show_details.name}">Name: </label>
             </div>
             <div class="col-12 col-sm-10">
               <span th:text="${client.getName()}"></span>
@@ -38,7 +38,7 @@
         <li class="list-group-item">
           <div class="row">
             <div class="col-12 col-sm-2">
-              <label>Surname: </label>
+              <label th:text="#{text.template.client.show_details.surname}">Surname: </label>
             </div>
             <div class="col-12 col-sm-10">
               <span th:text="${client.getSurname()}"></span>
@@ -49,7 +49,7 @@
         <li class="list-group-item">
           <div class="row">
             <div class="col-12 col-sm-2">
-              <label>Email: </label>
+              <label th:text="#{text.templates.client.show_details.email}">Email: </label>
             </div>
             <div class="col-12 col-sm-10">
               <span th:text="${client.getEmail()}"></span>
@@ -60,7 +60,7 @@
         <li class="list-group-item">
           <div class="row">
             <div class="col-12 col-sm-2">
-              <label>Account created at: </label>
+              <label th:text="#{text.templates.client.show_details.createdAt}">Account created at: </label>
             </div>
             <div class="col-12 col-sm-10">
               <span th:text="${#dates.format(client.createdAt, 'dd.MM.yyyy')}"></span>
@@ -71,11 +71,11 @@
 
 
       <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{'/invoice/form/' + ${client.id}}"
-         class="btn btn-info btn-xs">Create Invoice</a>
+         class="btn btn-info btn-xs" th:text="#{text.client.invoice.new}">Create Invoice</a>
 
       <div th:if="${#lists.isEmpty(client.invoices)}"
            class="invoice-container alert alert-info my-4"
-           th:text="'The Client '+ ${client.getFullName()} + ' has not invoices.'">
+           th:text="#{text.client.details.no.invoices}">
       </div>
 
       <div th:if="${not #lists.isEmpty(client.invoices)}"
@@ -84,12 +84,12 @@
         <table class="table table-bordered table-striped table-hover">
           <thead class="bg-primary text-white">
           <tr>
-            <th>Nr. Invoice</th>
-            <th>Description</th>
-            <th>Created at</th>
-            <th>Last Update at</th>
-            <th>Total</th>
-            <th sec:authorize="hasRole('ROLE_ADMIN')" class="text-center" colspan="2">Actions</th>
+            <th th:text="#{text.client.invoice.number}">Nr. Invoice</th>
+            <th th:text="#{text.client.invoice.description}">Description</th>
+            <th th:text="#{text.client.invoice.createdAt}">Created at</th>
+            <th th:text="#{text.client.invoice.updatedAt}">Last Update at</th>
+            <th th:text="#{text.client.invoice.total}">Total</th>
+            <th th:text="#{text.client.invoice.actions}" sec:authorize="hasRole('ROLE_ADMIN')" class="text-center" colspan="2">Actions</th>
           </tr>
           </thead>
           <tbody>
@@ -99,10 +99,10 @@
             <td th:text="${#dates.format(invoice.getCreatedAt(), 'dd.MM.yyyy')}"></td>
             <td th:text="${#dates.format(invoice.getUpdatedAt(), 'dd.MM.yyyy')}"></td>
             <td><span class="currency-euro" th:text="${#numbers.formatDecimal(invoice.getTotal(), 0, 'POINT', 2, 'COMMA')}"></span></td>
-            <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-success btn-xs" th:href="@{'/invoice/' + ${invoice.id}}">Show Details</a></td>
+            <td sec:authorize="hasRole('ROLE_ADMIN')"><a class="btn btn-success btn-xs" th:href="@{'/invoice/' + ${invoice.id}}" th:text="#{text.client.invoice.detail}">Show Details</a></td>
             <td sec:authorize="hasRole('ROLE_ADMIN')"><a th:href="@{'/invoice/delete/' + ${invoice.id}}"
                    class="btn btn-danger btn-xs"
-                   onclick="return confirm('Are you sure, that you want to delete this Invoice?');">Delete</a></td>
+                   onclick="return confirm('Are you sure, that you want to delete this Invoice?');" th:text="#{text.client.invoice.delete}">Delete</a></td>
           </tr>
           </tbody>
         </table>
