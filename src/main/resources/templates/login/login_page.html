@@ -9,30 +9,28 @@
 <div class="container py-4">
   <div class="card border-primary text-center">
 
-    <div class="card-header">Please Sign In</div>
+    <div class="card-header" th:text="#{text.login.titulo}">Please Sign In</div>
     <div class="card-body">
 
       <form th:action="@{/login}" method="post">
 
         <div class="row mb-3">
           <div class="col-sm-6">
-            <input type="text" name="username" id="username" class="form-control" placeholder="UserName" autofocus
+            <input type="text" name="username" id="username" class="form-control" th:placeholder="#{text.login.username}" autofocus
                    required/>
           </div>
         </div>
 
-
         <div class="row mb-3">
           <div class="col-sm-6">
-            <input type="password" name="password" id="password" class="form-control" placeholder="PassWord" required/>
+            <input type="password" name="password" id="password" class="form-control" th:placeholder="#{text.login.password}" required/>
           </div>
         </div>
-
 
         <div class="row mb-3">
           <div class="col-sm-6">
             <div class="d-grid">
-              <input type="submit" class="btn btn-primary" value="Sign In"/>
+              <input type="submit" class="btn btn-primary" th:value="#{text.login.boton}"/>
             </div>
           </div>
         </div>

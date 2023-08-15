@@ -14,9 +14,9 @@
 
 
 <footer th:fragment="footer" class="container">
-  <h6 class="text-center">Master en Spring Boot de Luis Beroiza</h6>
+  <h6 class="text-center" th:utext="#{text.footer.copy}"></h6>
   <p sec:authorize="isAuthenticated()">
-    Logged User: <span sec:authentication="name"></span> | Roles: <span sec:authentication="principal.authorities">Bob</span>
+    <span th:text="#{text.footer.user}"></span> <span sec:authentication="name"></span> | <span th:text="#{text.footer.roles}"></span> <span sec:authentication="principal.authorities">Bob</span>
   </p>
   <script th:src="@{/js/bootstrap.bundle.min.js}"></script>
   <script th:src="@{/application/js/utils/Alert.js}"></script>
