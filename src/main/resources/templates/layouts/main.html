@@ -15,7 +15,7 @@
 
 <footer th:fragment="footer" class="container">
   <h6 class="text-center" th:utext="#{text.footer.copy}"></h6>
-  <p sec:authorize="isAuthenticated()">
+  <p class="text-center" sec:authorize="isAuthenticated()">
     <span th:text="#{text.footer.user}"></span> <span sec:authentication="name"></span> | <span th:text="#{text.footer.roles}"></span> <span sec:authentication="principal.authorities">Bob</span>
   </p>
   <script th:src="@{/js/bootstrap.bundle.min.js}"></script>

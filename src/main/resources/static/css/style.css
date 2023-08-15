@@ -1,3 +1,26 @@
 .currency-euro::after{
   content:" €";
 }
+
+body {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header"
+    "content"
+    "footer"
+  ;
+}
+
+body header {
+  grid-area: header;
+}
+
+body div.container {
+  grid-area: content;
+}
+
+body footer{
+  grid-area: footer;
+}
