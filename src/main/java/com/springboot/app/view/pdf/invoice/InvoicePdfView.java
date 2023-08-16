@@ -39,8 +39,4 @@ public class InvoicePdfView extends AbstractPdfView {
   }
 
 
-
-
-
-
 }
