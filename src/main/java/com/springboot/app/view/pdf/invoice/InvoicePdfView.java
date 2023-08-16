@@ -1,6 +1,8 @@
 package com.springboot.app.view.pdf.invoice;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.springboot.app.models.entity.Invoice;
@@ -45,28 +47,53 @@ public class InvoicePdfView extends AbstractPdfView {
   }
 
 
-  private PdfPTable createCustomerInfoTable(Invoice invoice, Locale locale){
-    PdfPTable tableCustomer = new PdfPTable(1);
+  private PdfPTable createCustomerInfoTable(Invoice invoice, Locale locale) {
+    PdfPTable tableCustomer = new PdfPTable(2);
     String text = this.messageSource.getMessage("text.invoice.show.data.client", null, locale);
+    PdfPCell headerCell = new PdfPCell(new Phrase(text));
+    headerCell.setColspan(2);
+    headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+    tableCustomer.addCell(headerCell);
+
+    text = this.messageSource.getMessage("text.view.export.client.fullname", null, locale);
     tableCustomer.addCell(text);
     tableCustomer.addCell(invoice.getClientFullName());
+
+    text = this.messageSource.getMessage("text.templates.client.email", null, locale);
+    tableCustomer.addCell(text);
     tableCustomer.addCell(invoice.getClient().getEmail());
     return tableCustomer;
   }
 
-  private PdfPTable createInvoiceInfoTable(Invoice invoice, Locale locale){
+  private PdfPTable createInvoiceInfoTable(Invoice invoice, Locale locale) {
     String datePattern = this.messageSource.getMessage("pattern.date", null, locale);
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
 
-    PdfPTable tableInvoice = new PdfPTable(1);
+    PdfPTable tableInvoice = new PdfPTable(2);
     String text = this.messageSource.getMessage("text.invoice.show.title", null, locale);
-    tableInvoice.addCell(String.format(text, invoice.getId(), invoice.getClientFullName()));
+    PdfPCell headerCell = new PdfPCell(new Phrase(String.format(text, invoice.getId(), invoice.getClientFullName())));
+    headerCell.setColspan(2);
+    headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
+    tableInvoice.addCell(headerCell);
+
     text = this.messageSource.getMessage("text.client.invoice.number", null, locale);
-    tableInvoice.addCell(String.format("%s: %d", text, invoice.getId()));
+    tableInvoice.addCell(text);
+    tableInvoice.addCell(invoice.getId().toString());
+
     text = this.messageSource.getMessage("text.client.invoice.description", null, locale);
-    tableInvoice.addCell(String.format("%s: %s", text, invoice.getDescription()));
+    tableInvoice.addCell(text);
+    tableInvoice.addCell(invoice.getDescription());
+
     text = this.messageSource.getMessage("text.client.invoice.createdAt", null, locale);
-    tableInvoice.addCell(String.format("%s: %s", text, simpleDateFormat.format(invoice.getCreatedAt())));
+    tableInvoice.addCell(text);
+    tableInvoice.addCell(simpleDateFormat.format(invoice.getCreatedAt()));
+
+    if(invoice.hasObs()){
+      text = this.messageSource.getMessage("text.invoice.form.obs", null, locale);
+      tableInvoice.addCell(text);
+      tableInvoice.addCell(invoice.getObs());
+    }
+
     return tableInvoice;
   }
 

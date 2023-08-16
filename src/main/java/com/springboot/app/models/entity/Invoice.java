@@ -75,6 +75,10 @@ public class Invoice implements EntityTable {
     this.description = description;
   }
 
+  public boolean hasObs() {
+    return this.obs != null && !this.obs.isBlank();
+  }
+
   public String getObs() {
     return obs;
   }
