@@ -1,40 +1,30 @@
 package com.springboot.app.exporters.pdf;
 
 import com.lowagie.text.Document;
-import com.lowagie.text.Font;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.springboot.app.models.entity.Invoice;
 import com.springboot.app.models.entity.InvoiceItem;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
+import org.springframework.context.support.MessageSourceAccessor;
 import org.springframework.stereotype.Service;
 
 import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 @Service("ExporterInvoice2PDFService")
 public class ExporterInvoice2PDFService implements ExporterPDFService<Invoice> {
 
 
-  private final MessageSource messageSource;
-
-  @Autowired
-  public ExporterInvoice2PDFService(MessageSource messageSource) {
-    this.messageSource = messageSource;
-  }
-
   @Override
-  public void addDataToDocument(Document pdfDocument, Invoice invoice, Locale locale) {
-    PdfPTable tableCustomer = this.createCustomerInfoTable(invoice, locale);
+  public void addDataToDocument(Document pdfDocument, Invoice invoice, MessageSourceAccessor messageSourceAccessor) {
+    PdfPTable tableCustomer = this.createCustomerInfoTable(invoice, messageSourceAccessor);
     tableCustomer.setSpacingAfter(20);
 
-    PdfPTable tableInvoice = this.createInvoiceInfoTable(invoice, locale);
+    PdfPTable tableInvoice = this.createInvoiceInfoTable(invoice, messageSourceAccessor);
     tableInvoice.setSpacingAfter(10);
 
-    PdfPTable tableInvoiceDetails = this.createInvoiceDetailsTable(invoice, locale);
+    PdfPTable tableInvoiceDetails = this.createInvoiceDetailsTable(invoice, messageSourceAccessor);
 
     pdfDocument.add(tableCustomer);
     pdfDocument.add(tableInvoice);
@@ -52,54 +42,54 @@ public class ExporterInvoice2PDFService implements ExporterPDFService<Invoice> {
     return headerCell;
   }
 
-  private PdfPTable createCustomerInfoTable(Invoice invoice, Locale locale) {
+  private PdfPTable createCustomerInfoTable(Invoice invoice, MessageSourceAccessor messageSourceAccessor) {
     PdfPTable tableCustomer = new PdfPTable(2);
     tableCustomer.setWidths(new float[] {1f, 3f});
 
-    String text = this.messageSource.getMessage("text.invoice.show.data.client", null, locale);
+    String text = messageSourceAccessor.getMessage("text.invoice.show.data.client");
     PdfPCell headerCell = this.createHeaderCell(text);
     headerCell.setColspan(tableCustomer.getNumberOfColumns());
     headerCell.setBackgroundColor(new Color (184, 218, 255));
     tableCustomer.addCell(headerCell);
 
-    text = this.messageSource.getMessage("text.view.export.client.fullname", null, locale);
+    text = messageSourceAccessor.getMessage("text.view.export.client.fullname");
     tableCustomer.addCell(text);
     tableCustomer.addCell(invoice.getClientFullName());
 
-    text = this.messageSource.getMessage("text.templates.client.email", null, locale);
+    text = messageSourceAccessor.getMessage("text.templates.client.email");
     tableCustomer.addCell(text);
     tableCustomer.addCell(invoice.getClient().getEmail());
     return tableCustomer;
   }
 
 
-  private PdfPTable createInvoiceInfoTable(Invoice invoice, Locale locale) {
-    String datePattern = this.messageSource.getMessage("pattern.date", null, locale);
+  private PdfPTable createInvoiceInfoTable(Invoice invoice, MessageSourceAccessor messageSourceAccessor) {
+    String datePattern = messageSourceAccessor.getMessage("pattern.date");
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
 
     PdfPTable tableInvoice = new PdfPTable(2);
     tableInvoice.setWidths(new float[] {1f, 3f});
 
-    String text = this.messageSource.getMessage("text.invoice.show.title", null, locale);
+    String text = messageSourceAccessor.getMessage("text.invoice.show.title");
     PdfPCell headerCell = this.createHeaderCell(String.format(text, invoice.getId(), invoice.getClientFullName()));
     headerCell.setColspan(tableInvoice.getNumberOfColumns());
     headerCell.setBackgroundColor(new Color (195, 230, 203));
     tableInvoice.addCell(headerCell);
 
-    text = this.messageSource.getMessage("text.client.invoice.number", null, locale);
+    text = messageSourceAccessor.getMessage("text.client.invoice.number");
     tableInvoice.addCell(text);
     tableInvoice.addCell(invoice.getId().toString());
 
-    text = this.messageSource.getMessage("text.client.invoice.description", null, locale);
+    text = messageSourceAccessor.getMessage("text.client.invoice.description");
     tableInvoice.addCell(text);
     tableInvoice.addCell(invoice.getDescription());
 
-    text = this.messageSource.getMessage("text.client.invoice.createdAt", null, locale);
+    text = messageSourceAccessor.getMessage("text.client.invoice.createdAt");
     tableInvoice.addCell(text);
     tableInvoice.addCell(simpleDateFormat.format(invoice.getCreatedAt()));
 
     if (invoice.hasObs()) {
-      text = this.messageSource.getMessage("text.invoice.form.obs", null, locale);
+      text = messageSourceAccessor.getMessage("text.invoice.form.obs");
       tableInvoice.addCell(text);
       tableInvoice.addCell(invoice.getObs());
     }
@@ -118,25 +108,25 @@ public class ExporterInvoice2PDFService implements ExporterPDFService<Invoice> {
     return headerCell;
   }
 
-  private PdfPTable createInvoiceDetailsTable(Invoice invoice, Locale locale) {
-    String datePattern = this.messageSource.getMessage("pattern.date", null, locale);
+  private PdfPTable createInvoiceDetailsTable(Invoice invoice, MessageSourceAccessor messageSourceAccessor) {
+    String datePattern = messageSourceAccessor.getMessage("pattern.date");
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
 
     PdfPTable tableInvoiceDetails = new PdfPTable(5);
     tableInvoiceDetails.setWidths(new float[] {1f, 3f, 1f, 1f, 1f});
 
-    String text = this.messageSource.getMessage("text.invoice.form.productNr", null, locale);
+    String text = messageSourceAccessor.getMessage("text.invoice.form.productNr");
     tableInvoiceDetails.addCell(this.createInvoiceDetailsTableHeader(text));
-    text = this.messageSource.getMessage("text.invoice.form.item.productName", null, locale);
+    text = messageSourceAccessor.getMessage("text.invoice.form.item.productName");
     tableInvoiceDetails.addCell(this.createInvoiceDetailsTableHeader(text));
-    text = this.messageSource.getMessage("text.invoice.form.item.price", null, locale);
+    text = messageSourceAccessor.getMessage("text.invoice.form.item.price");
     tableInvoiceDetails.addCell(this.createInvoiceDetailsTableHeader(text));
-    text = this.messageSource.getMessage("text.invoice.form.item.quantity", null, locale);
+    text = messageSourceAccessor.getMessage("text.invoice.form.item.quantity");
     tableInvoiceDetails.addCell(this.createInvoiceDetailsTableHeader(text));
-    text = this.messageSource.getMessage("text.invoice.form.item.total", null, locale);
+    text = messageSourceAccessor.getMessage("text.invoice.form.item.total");
     tableInvoiceDetails.addCell(this.createInvoiceDetailsTableHeader(text));
 
-    String patternPrice = this.messageSource.getMessage("pattern.price", null, locale);
+    String patternPrice = messageSourceAccessor.getMessage("pattern.price");
     for (InvoiceItem item : invoice.getInvoiceItems()) {
       tableInvoiceDetails.addCell(item.getId().toString());
       tableInvoiceDetails.addCell(item.getProductName());
@@ -147,7 +137,7 @@ public class ExporterInvoice2PDFService implements ExporterPDFService<Invoice> {
       tableInvoiceDetails.addCell(String.format(patternPrice, item.getAmount()));
     }
 
-    text = this.messageSource.getMessage("text.invoice.form.total", null, locale);
+    text = messageSourceAccessor.getMessage("text.invoice.form.total");
     PdfPCell footerTotal = this.createCell(text);
     footerTotal.setColspan(tableInvoiceDetails.getNumberOfColumns() - 1);
     footerTotal.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);

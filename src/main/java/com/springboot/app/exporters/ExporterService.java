@@ -1,9 +1,10 @@
 package com.springboot.app.exporters;
 
-import java.util.Locale;
+import org.springframework.context.support.MessageSourceAccessor;
+
 
 public interface ExporterService<D, I> {
 
-  void addDataToDocument(D document, I entity, Locale locale);
+  void addDataToDocument(D document, I entity, MessageSourceAccessor messageSourceAccessor);
 
 }
