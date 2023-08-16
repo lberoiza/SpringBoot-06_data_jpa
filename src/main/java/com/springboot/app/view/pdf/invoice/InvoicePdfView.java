@@ -6,6 +6,7 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 import com.springboot.app.models.entity.Invoice;
+import com.springboot.app.models.entity.InvoiceItem;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,18 +41,20 @@ public class InvoicePdfView extends AbstractPdfView {
     tableCustomer.setSpacingAfter(20);
 
     PdfPTable tableInvoice = this.createInvoiceInfoTable(invoice, locale);
-    tableInvoice.setSpacingAfter(20);
+    tableInvoice.setSpacingAfter(10);
+
+    PdfPTable tableInvoiceDetails = this.createInvoiceDetailsTable(invoice, locale);
 
     document.add(tableCustomer);
     document.add(tableInvoice);
+    document.add(tableInvoiceDetails);
   }
-
 
   private PdfPTable createCustomerInfoTable(Invoice invoice, Locale locale) {
     PdfPTable tableCustomer = new PdfPTable(2);
     String text = this.messageSource.getMessage("text.invoice.show.data.client", null, locale);
     PdfPCell headerCell = new PdfPCell(new Phrase(text));
-    headerCell.setColspan(2);
+    headerCell.setColspan(tableCustomer.getNumberOfColumns());
     headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
     tableCustomer.addCell(headerCell);
 
@@ -72,7 +75,7 @@ public class InvoicePdfView extends AbstractPdfView {
     PdfPTable tableInvoice = new PdfPTable(2);
     String text = this.messageSource.getMessage("text.invoice.show.title", null, locale);
     PdfPCell headerCell = new PdfPCell(new Phrase(String.format(text, invoice.getId(), invoice.getClientFullName())));
-    headerCell.setColspan(2);
+    headerCell.setColspan(tableInvoice.getNumberOfColumns());
     headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
     tableInvoice.addCell(headerCell);
 
@@ -95,6 +98,43 @@ public class InvoicePdfView extends AbstractPdfView {
     }
 
     return tableInvoice;
+  }
+
+
+  private PdfPTable createInvoiceDetailsTable(Invoice invoice, Locale locale) {
+    String datePattern = this.messageSource.getMessage("pattern.date", null, locale);
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
+
+    PdfPTable tableInvoiceDetails = new PdfPTable(5);
+
+    String text = this.messageSource.getMessage("text.invoice.form.productNr", null, locale);
+    tableInvoiceDetails.addCell(text);
+    text = this.messageSource.getMessage("text.invoice.form.item.productName", null, locale);
+    tableInvoiceDetails.addCell(text);
+    text = this.messageSource.getMessage("text.invoice.form.item.price", null, locale);
+    tableInvoiceDetails.addCell(text);
+    text = this.messageSource.getMessage("text.invoice.form.item.quantity", null, locale);
+    tableInvoiceDetails.addCell(text);
+    text = this.messageSource.getMessage("text.invoice.form.item.total", null, locale);
+    tableInvoiceDetails.addCell(text);
+
+    String patternPrice = this.messageSource.getMessage("pattern.price", null, locale);
+    for(InvoiceItem item : invoice.getInvoiceItems()){
+      tableInvoiceDetails.addCell(item.getId().toString());
+      tableInvoiceDetails.addCell(item.getProductName());
+      tableInvoiceDetails.addCell(String.format(patternPrice, item.getProductPrice()));
+      tableInvoiceDetails.addCell(item.getQuantity().toString());
+      tableInvoiceDetails.addCell(String.format(patternPrice, item.getAmount()));
+    }
+
+    text = this.messageSource.getMessage("text.invoice.form.total", null, locale);
+    PdfPCell footerTotal = new PdfPCell(new Phrase(text));
+    footerTotal.setColspan(tableInvoiceDetails.getNumberOfColumns()-1);
+    footerTotal.setHorizontalAlignment(PdfPCell.ALIGN_RIGHT);
+    tableInvoiceDetails.addCell(footerTotal);
+    tableInvoiceDetails.addCell(String.format(patternPrice, invoice.getTotal()));
+
+    return tableInvoiceDetails;
   }
 
 
