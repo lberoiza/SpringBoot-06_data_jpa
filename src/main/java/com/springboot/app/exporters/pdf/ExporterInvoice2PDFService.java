@@ -4,6 +4,7 @@ import com.lowagie.text.Document;
 import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
+import com.springboot.app.exporters.ExporterService;
 import com.springboot.app.models.entity.Invoice;
 import com.springboot.app.models.entity.InvoiceItem;
 import org.springframework.context.support.MessageSourceAccessor;
@@ -13,7 +14,7 @@ import java.awt.*;
 import java.text.SimpleDateFormat;
 
 @Service("ExporterInvoice2PDFService")
-public class ExporterInvoice2PDFService implements ExporterPDFService<Invoice> {
+public class ExporterInvoice2PDFService implements ExporterService<Document, Invoice> {
 
 
   @Override
