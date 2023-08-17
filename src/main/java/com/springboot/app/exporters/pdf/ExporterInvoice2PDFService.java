@@ -16,6 +16,10 @@ import java.text.SimpleDateFormat;
 @Service("ExporterInvoice2PDFService")
 public class ExporterInvoice2PDFService implements ExporterService<Document, Invoice> {
 
+  private static final Color CUSTOMER_DATA_HEADE_RB_GCOLOR = new Color(184, 218, 255);
+  private static final Color INVOICE_DATA_HEADER_BG_COLOR = new Color(195, 230, 203);
+  private static final Color INVOICE_DETAILS_HEADER_BG_COLOR = new Color(13, 110, 253);
+
 
   @Override
   public void addDataToDocument(Document pdfDocument, Invoice invoice, MessageSourceAccessor messageSourceAccessor) {
@@ -45,12 +49,12 @@ public class ExporterInvoice2PDFService implements ExporterService<Document, Inv
 
   private PdfPTable createCustomerInfoTable(Invoice invoice, MessageSourceAccessor messageSourceAccessor) {
     PdfPTable tableCustomer = new PdfPTable(2);
-    tableCustomer.setWidths(new float[] {1f, 3f});
+    tableCustomer.setWidths(new float[]{1f, 3f});
 
     String text = messageSourceAccessor.getMessage("text.invoice.show.data.client");
     PdfPCell headerCell = this.createHeaderCell(text);
     headerCell.setColspan(tableCustomer.getNumberOfColumns());
-    headerCell.setBackgroundColor(new Color (184, 218, 255));
+    headerCell.setBackgroundColor(CUSTOMER_DATA_HEADE_RB_GCOLOR);
     tableCustomer.addCell(headerCell);
 
     text = messageSourceAccessor.getMessage("text.view.export.client.fullname");
@@ -69,12 +73,12 @@ public class ExporterInvoice2PDFService implements ExporterService<Document, Inv
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
 
     PdfPTable tableInvoice = new PdfPTable(2);
-    tableInvoice.setWidths(new float[] {1f, 3f});
+    tableInvoice.setWidths(new float[]{1f, 3f});
 
     String text = messageSourceAccessor.getMessage("text.invoice.show.title");
     PdfPCell headerCell = this.createHeaderCell(String.format(text, invoice.getId(), invoice.getClientFullName()));
     headerCell.setColspan(tableInvoice.getNumberOfColumns());
-    headerCell.setBackgroundColor(new Color (195, 230, 203));
+    headerCell.setBackgroundColor(INVOICE_DATA_HEADER_BG_COLOR);
     tableInvoice.addCell(headerCell);
 
     text = messageSourceAccessor.getMessage("text.client.invoice.number");
@@ -99,12 +103,11 @@ public class ExporterInvoice2PDFService implements ExporterService<Document, Inv
   }
 
 
-  private PdfPCell createInvoiceDetailsTableHeader(String text){
-    Color bgHeaderColor = new Color(13, 110, 253);
+  private PdfPCell createInvoiceDetailsTableHeader(String text) {
     Color fontHeaderColor = Color.white;
     PdfPCell headerCell = this.createHeaderCell(text);
     headerCell.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
-    headerCell.setBackgroundColor(bgHeaderColor);
+    headerCell.setBackgroundColor(INVOICE_DETAILS_HEADER_BG_COLOR);
     headerCell.getPhrase().getFont().setColor(fontHeaderColor);
     return headerCell;
   }
@@ -114,7 +117,7 @@ public class ExporterInvoice2PDFService implements ExporterService<Document, Inv
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
 
     PdfPTable tableInvoiceDetails = new PdfPTable(5);
-    tableInvoiceDetails.setWidths(new float[] {1f, 3f, 1f, 1f, 1f});
+    tableInvoiceDetails.setWidths(new float[]{1f, 3f, 1f, 1f, 1f});
 
     String text = messageSourceAccessor.getMessage("text.invoice.form.productNr");
     tableInvoiceDetails.addCell(this.createInvoiceDetailsTableHeader(text));
