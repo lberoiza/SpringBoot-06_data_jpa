@@ -16,7 +16,7 @@
         <a class="btn btn-success" th:href="@{'/client/' + ${invoice.clientId}}"
            th:utext="#{text.global.back}"></a>
         <a class="btn btn-danger btn-sm float-end mx-2" target="_blank" th:href="@{'/invoice/' + ${invoice.id}(format=pdf)}">PDF</a>
-        <a class="btn btn-success btn-sm float-end" target="_blank" th:href="@{'/invoice/' + ${invoice.id}(format=xlsx)}">XLS</a>
+        <a class="btn btn-success btn-sm float-end" th:href="@{'/invoice/' + ${invoice.id}(format=xlsx)}">XLS</a>
 
       </h4>
 
