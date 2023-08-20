@@ -30,7 +30,7 @@ INSERT INTO products (id, price, created_at, updated_at, description, name) VALU
 INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (2, 350, NOW(), NOW(), 'Digital Camera Sony DSC-W320B', 'Sony Camera');
 INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (3, 300, NOW(), NOW(), 'Apple Ipod Shuffle', 'Ipod');
 INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (4, 1500, NOW(), NOW(), 'Notebook Sony Vaio 15 inch', 'Sony Vaio');
-INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (5, 279.89, NOW(), NOW(), 'Hewlett Packard Multiprinter', ' Printer HP');
+INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (5, 279.89, NOW(), NOW(), 'Hewlett Packard Multiprinter', 'Printer HP');
 INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (6, 1359.89, NOW(), NOW(), 'Bicycle Bianchi 17 inch wheels', 'Bianchi Bicycle');
 INSERT INTO products (id, price, created_at, updated_at, description, name) VALUES  (7, 435, NOW(), NOW(), 'Desk for office', 'Mica Desk');
 
