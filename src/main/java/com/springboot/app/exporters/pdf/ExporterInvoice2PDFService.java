@@ -113,9 +113,6 @@ public class ExporterInvoice2PDFService implements ExporterService<Document, Inv
   }
 
   private PdfPTable createInvoiceDetailsTable(Invoice invoice, MessageSourceAccessor messageSourceAccessor) {
-    String datePattern = messageSourceAccessor.getMessage("pattern.date");
-    SimpleDateFormat simpleDateFormat = new SimpleDateFormat(datePattern);
-
     PdfPTable tableInvoiceDetails = new PdfPTable(5);
     tableInvoiceDetails.setWidths(new float[]{1f, 3f, 1f, 1f, 1f});
 
