@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 @Service("ExporterInvoice2XlsxService")
 public class ExporterInvoice2XlsxService implements ExporterService<Workbook, Invoice> {
 
-  private static final IndexedColors CUSTOMER_DATA_HEADER_RB_GCOLOR = IndexedColors.PALE_BLUE;
+  private static final IndexedColors CUSTOMER_DATA_HEADER_BG_COLOR = IndexedColors.PALE_BLUE;
   private static final IndexedColors INVOICE_DATA_HEADER_BG_COLOR = IndexedColors.GOLD;
   private static final IndexedColors INVOICE_DETAILS_HEADER_BG_COLOR = IndexedColors.SKY_BLUE;
 
@@ -75,7 +75,7 @@ public class ExporterInvoice2XlsxService implements ExporterService<Workbook, In
     String text = messageSourceAccessor.getMessage("text.invoice.show.data.client");
     Row row = sheet.createRow(startRow++);
 
-    CellStyle cellHeaderStyle = this.createHeaderStyle(sheet, CUSTOMER_DATA_HEADER_RB_GCOLOR);
+    CellStyle cellHeaderStyle = this.createHeaderStyle(sheet, CUSTOMER_DATA_HEADER_BG_COLOR);
     Cell headerCell = this.createCell(row, 0, text);
     headerCell.setCellStyle(cellHeaderStyle);
 
@@ -164,7 +164,14 @@ public class ExporterInvoice2XlsxService implements ExporterService<Workbook, In
     headerCell = this.createCell(row, 4, text);
     headerCell.setCellStyle(cellHeaderStyle);
 
+    this.addInvoiceDetailsTableToSheet(sheet, invoice, messageSourceAccessor, startRow);
+  }
+
+  private void addInvoiceDetailsTableToSheet(Sheet sheet, Invoice invoice, MessageSourceAccessor messageSourceAccessor, int startRow){
+    Row row;
+    String text;
     String patternPrice = messageSourceAccessor.getMessage("pattern.price");
+
     CellStyle detailCellStyleLeft = sheet.getWorkbook().createCellStyle();
     detailCellStyleLeft.setAlignment(HorizontalAlignment.LEFT);
     this.addCellBorders(detailCellStyleLeft);
@@ -177,7 +184,6 @@ public class ExporterInvoice2XlsxService implements ExporterService<Workbook, In
     detailCellStyleRight.setAlignment(HorizontalAlignment.RIGHT);
     this.addCellBorders(detailCellStyleRight);
 
-    this.addCellBorders(detailCellStyleLeft);
     for (InvoiceItem item : invoice.getInvoiceItems()) {
       row = sheet.createRow(startRow++);
       Cell detailCell = this.createCell(row, 0, item.getId().toString());
@@ -204,6 +210,5 @@ public class ExporterInvoice2XlsxService implements ExporterService<Workbook, In
     totalCell = this.createCell(row, 4, String.format(patternPrice, invoice.getTotal()));
     totalCell.setCellStyle(detailCellStyleRight);
   }
-
 
 }
