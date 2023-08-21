@@ -25,6 +25,7 @@ public class ExporterInvoice2XlsxService implements ExporterService<Workbook, In
     this.addCustomerInfoToWorkbook(sheet, invoice, messageSourceAccessor);
     this.addInvoiceInfoToWorkbook(sheet, invoice, messageSourceAccessor);
     this.addInvoiceDetailsToWorkbook(sheet, invoice, messageSourceAccessor);
+    this.setAutozizeColumns(sheet, 10);
   }
 
   private Cell createCell(Row row, int columnPosition, Object valueOfCell) {
@@ -167,7 +168,7 @@ public class ExporterInvoice2XlsxService implements ExporterService<Workbook, In
     this.addInvoiceDetailsTableToSheet(sheet, invoice, messageSourceAccessor, startRow);
   }
 
-  private void addInvoiceDetailsTableToSheet(Sheet sheet, Invoice invoice, MessageSourceAccessor messageSourceAccessor, int startRow){
+  private void addInvoiceDetailsTableToSheet(Sheet sheet, Invoice invoice, MessageSourceAccessor messageSourceAccessor, int startRow) {
     Row row;
     String text;
     String patternPrice = messageSourceAccessor.getMessage("pattern.price");
@@ -210,5 +211,12 @@ public class ExporterInvoice2XlsxService implements ExporterService<Workbook, In
     totalCell = this.createCell(row, 4, String.format(patternPrice, invoice.getTotal()));
     totalCell.setCellStyle(detailCellStyleRight);
   }
+
+  private void setAutozizeColumns(Sheet sheet, int untilColumnNr) {
+    for (int i = 0; i < untilColumnNr; i++) {
+      sheet.autoSizeColumn(i);
+    }
+  }
+
 
 }
