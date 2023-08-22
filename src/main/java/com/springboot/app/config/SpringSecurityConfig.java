@@ -20,6 +20,7 @@ public class SpringSecurityConfig {
 
   public static final String[] ENDPOINTS_WHITELIST = {
       "/",
+      "/icons/**",
       "/css/**",
       "/js/**",
       "/images/**",
