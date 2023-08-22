@@ -30,8 +30,6 @@ public class ClientListCsvView extends AbstractView {
 
   @Override
   protected void renderMergedOutputModel(Map<String, Object> model, HttpServletRequest request, HttpServletResponse response) throws Exception {
-    System.out.println("obtiene listado de clientes en csv");
-
     String filename = "ClientList.csv";
     String filenameHeaderPattern = "attachment; filename=\"%d_%s\"";
     String header = String.format(filenameHeaderPattern, new Date().getTime(), filename);
