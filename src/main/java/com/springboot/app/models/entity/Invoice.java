@@ -2,6 +2,7 @@ package com.springboot.app.models.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.xml.bind.annotation.XmlTransient;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serial;
@@ -103,6 +104,7 @@ public class Invoice implements EntityTable {
     this.updatedAt = updatedAt;
   }
 
+  @XmlTransient
   public Client getClient() {
     return client;
   }
