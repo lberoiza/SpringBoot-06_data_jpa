@@ -17,7 +17,8 @@
            class="btn btn-success"
            th:text="#{text.client.new}">Add new client</a>
 
-        <a class="btn btn-info btn-sm float-end" th:href="@{'/client/list'(format=csv)}">CSV</a>
+        <a class="btn btn-info btn-sm float-end mx-1" th:href="@{'/client/list'(format=csv)}">CSV</a>
+        <a class="btn btn-outline-info btn-sm float-end mx-1" target="_blank" th:href="@{'/client/list'(format=xml)}">XML</a>
       </h4>
 
 
