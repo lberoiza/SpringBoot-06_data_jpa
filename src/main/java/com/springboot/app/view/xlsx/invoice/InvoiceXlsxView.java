@@ -25,8 +25,9 @@ public class InvoiceXlsxView extends AbstractXlsxView {
   @Override
   protected void buildExcelDocument(Map<String, Object> model, Workbook workbook, HttpServletRequest request, HttpServletResponse response) throws Exception {
     Invoice invoice = (Invoice) model.get("invoice");
+    String filename = "factura_view.xlsx";
     String filenameHeaderPattern = "attachment; filename=\"%d_%s\"";
-    String header = String.format(filenameHeaderPattern, new Date().getTime(), "factura_view.xlsx");
+    String header = String.format(filenameHeaderPattern, new Date().getTime(), filename);
     response.setHeader("Content-Disposition", header);
     exporterService.addDataToDocument(workbook, invoice, getMessageSourceAccessor());
   }
