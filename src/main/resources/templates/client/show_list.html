@@ -16,6 +16,8 @@
            th:href="@{/client/form}"
            class="btn btn-success"
            th:text="#{text.client.new}">Add new client</a>
+
+        <a class="btn btn-info btn-sm float-end" th:href="@{'/client/list'(format=csv)}">CSV</a>
       </h4>
 
 
