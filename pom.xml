@@ -84,10 +84,24 @@
       <version>5.2.3</version>
     </dependency>
 
+    <!-- Libreria para trabajar con documentos csv-->
     <dependency>
       <groupId>net.sf.supercsv</groupId>
       <artifactId>super-csv</artifactId>
       <version>2.4.0</version>
+    </dependency>
+
+    <!-- Libreria para trabajar con documentos xml-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-oxm</artifactId>
+    </dependency>
+
+    <!-- Desde java 9 que Jaxb no es parte de core -->
+    <!-- se debe instalar de forma manual. Al no poner version Spring Boot la administra -->
+    <dependency>
+      <groupId>org.glassfish.jaxb</groupId>
+      <artifactId>jaxb-runtime</artifactId>
     </dependency>
 
   </dependencies>
