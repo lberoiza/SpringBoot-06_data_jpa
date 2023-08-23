@@ -25,7 +25,8 @@ public class SpringSecurityConfig {
       "/js/**",
       "/images/**",
       "/client/list",
-      "/locale"
+      "/locale",
+      "/api/**"
   };
 
   private final LoginSuccessHandler loginSuccessHandler;
