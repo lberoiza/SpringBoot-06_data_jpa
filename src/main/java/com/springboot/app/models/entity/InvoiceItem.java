@@ -1,5 +1,6 @@
 package com.springboot.app.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -19,6 +20,7 @@ public class InvoiceItem implements EntityTable {
 
   @JoinColumn(name = "product_id")
   @ManyToOne(fetch = FetchType.LAZY)
+  @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
   private Product product;
 
   public Long getId() {
