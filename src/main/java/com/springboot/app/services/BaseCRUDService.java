@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public abstract class BaseCRUDService<E extends EntityTable, R extends JpaRepository<E, Long>> {
@@ -14,12 +15,16 @@ public abstract class BaseCRUDService<E extends EntityTable, R extends JpaReposi
   protected R repository;
 
   @Autowired
-  private void setRepository(R repository){
+  private void setRepository(R repository) {
     this.repository = repository;
   }
 
   public Optional<E> findById(Long entityId) {
     return repository.findById(entityId);
+  }
+
+  public List<E> findAll() {
+    return repository.findAll();
   }
 
   public Page<E> findAll(Pageable pageable) {
@@ -42,7 +47,7 @@ public abstract class BaseCRUDService<E extends EntityTable, R extends JpaReposi
     repository.deleteAll();
   }
 
-  public Long count(){
+  public Long count() {
     return repository.count();
   }
 }
