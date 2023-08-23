@@ -29,16 +29,18 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
   private final AuthenticationManager authenticationManager;
 
+  private final ObjectMapper jsonParser;
+
 
   public JWTAuthenticationFilter(AuthenticationManager authenticationManager1) {
     this.authenticationManager = authenticationManager1;
+     this.jsonParser = new ObjectMapper();
     setRequiresAuthenticationRequestMatcher(new AntPathRequestMatcher("/api/login", "POST"));
+
   }
 
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-
-    ObjectMapper jsonParser = new ObjectMapper();
 
     String username = this.obtainUsername(request);
     username = username != null ? username.trim() : "";
@@ -47,7 +49,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     if (username.isBlank() && password.isBlank()) {
       try {
-        com.springboot.app.models.entity.User user = jsonParser.readValue(request.getInputStream(), com.springboot.app.models.entity.User.class);
+        com.springboot.app.models.entity.User user = this.jsonParser.readValue(request.getInputStream(), com.springboot.app.models.entity.User.class);
         username = user.getUsername();
         password = user.getPassword();
         logger.info("getting data from request");
@@ -65,12 +67,10 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-
-    ObjectMapper jsonParser = new ObjectMapper();
     User user = (User) authResult.getPrincipal();
 
     Claims claims = Jwts.claims();
-    claims.put("authorities", jsonParser.writeValueAsString(user.getAuthorities()));
+    claims.put("authorities", this.jsonParser.writeValueAsString(user.getAuthorities()));
     long milisecondPerHour = 3600000L;
 
     String token = Jwts.builder()
@@ -88,9 +88,21 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     body.put("user", user);
     body.put("message", String.format("Hi, %s. You has initialized session successfully", user.getUsername()));
 
-    response.getWriter().write(jsonParser.writeValueAsString(body));
+    response.getWriter().write(this.jsonParser.writeValueAsString(body));
     response.setStatus(200);
     response.setContentType("application/json");
+  }
 
+  @Override
+  protected void unsuccessfulAuthentication(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            AuthenticationException failed) throws IOException, ServletException {
+    Map<String, Object> body = new HashMap<>();
+    body.put("message", "User or Password incorrect");
+    body.put("error", failed.getMessage());
+
+    response.getWriter().write(this.jsonParser.writeValueAsString(body));
+    response.setStatus(401);
+    response.setContentType("application/json");
   }
 }
