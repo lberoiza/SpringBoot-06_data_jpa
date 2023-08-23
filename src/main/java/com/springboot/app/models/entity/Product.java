@@ -1,5 +1,6 @@
 package com.springboot.app.models.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 
 import java.io.Serial;
@@ -22,9 +23,11 @@ public class Product implements EntityTable {
   private Double price;
 
   @Temporal(TemporalType.TIMESTAMP)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date createdAt;
 
   @Temporal(TemporalType.TIMESTAMP)
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date updatedAt;
 
 
