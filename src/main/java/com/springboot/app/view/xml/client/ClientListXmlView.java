@@ -29,13 +29,6 @@ public class ClientListXmlView extends MarshallingView {
     Page<Client> clients = (Page<Client>) model.get("clients");
     model.clear();
     model.put("clientList", new ClientList(clients.getContent()));
-
-//    model.remove("title");
-//    model.remove("pageRender");
-//    model.remove("clients");
-
-
-
     super.renderMergedOutputModel(model, request, response);
   }
 }
