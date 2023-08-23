@@ -1,15 +1,17 @@
 package com.springboot.app.config;
 
+import com.springboot.app.auth.filters.JWTAuthenticationFilter;
 import com.springboot.app.auth.handlers.LoginSuccessHandler;
 import com.springboot.app.services.JpaUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -27,23 +29,26 @@ public class SpringSecurityConfig {
       "/js/**",
       "/images/**",
       "/client/list",
-      "/locale",
-      "/api/**"
+      "/locale"
   };
 
   private final LoginSuccessHandler loginSuccessHandler;
   private final BCryptPasswordEncoder passwordEncoder;
   private final JpaUserDetailsService userDetailsService;
 
+  private final AuthenticationConfiguration authenticationConfiguration;
+
   @Autowired
   public SpringSecurityConfig(
       LoginSuccessHandler loginSuccessHandler,
       BCryptPasswordEncoder passwordEncoder,
-      JpaUserDetailsService userDetailsService
+      JpaUserDetailsService userDetailsService,
+      AuthenticationConfiguration authenticationConfiguration
   ) {
     this.loginSuccessHandler = loginSuccessHandler;
     this.passwordEncoder = passwordEncoder;
     this.userDetailsService = userDetailsService;
+    this.authenticationConfiguration = authenticationConfiguration;
   }
 
   @Autowired
@@ -54,28 +59,25 @@ public class SpringSecurityConfig {
 
 
   @Bean
+  public AuthenticationManager authenticationManager() throws Exception {
+    return authenticationConfiguration.getAuthenticationManager();
+  }
+
+  @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http.authorizeHttpRequests(request ->
             request
                 .requestMatchers(ENDPOINTS_WHITELIST).permitAll()
-                .requestMatchers("/client/{id}").hasAnyRole("USER")
-                .requestMatchers("/uploads/**").hasAnyRole("USER")
-                .requestMatchers("/client/**").hasAnyRole("ADMIN")
-                .requestMatchers("/invoice/**").hasAnyRole("ADMIN")
+//                .requestMatchers("/client/{id}").hasAnyRole("USER")
+//                .requestMatchers("/uploads/**").hasAnyRole("USER")
+//                .requestMatchers("/client/**").hasAnyRole("ADMIN")
+//                .requestMatchers("/invoice/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated())
-        .formLogin(form -> form
-            .loginPage("/login")
-            .successHandler(loginSuccessHandler)
-            .permitAll()
-        )
-        .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
-            httpSecurityExceptionHandlingConfigurer.accessDeniedPage(ERROR_403_URL)
-        )
+        .addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(httpSecuritySessionManagementConfigurer ->
             httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-        )
-        .logout(LogoutConfigurer::permitAll);
+        );
     return http.build();
   }
 
