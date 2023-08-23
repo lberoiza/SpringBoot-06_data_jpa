@@ -38,17 +38,28 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   @Override
   public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
 
+    ObjectMapper jsonParser = new ObjectMapper();
+
     String username = this.obtainUsername(request);
     username = username != null ? username.trim() : "";
     String password = this.obtainPassword(request);
     password = password != null ? password : "";
 
+    if (username.isBlank() && password.isBlank()) {
+      try {
+        com.springboot.app.models.entity.User user = jsonParser.readValue(request.getInputStream(), com.springboot.app.models.entity.User.class);
+        username = user.getUsername();
+        password = user.getPassword();
+        logger.info("getting data from request");
+      } catch (Exception e) {
+        System.out.println(e.toString());
+      }
+    }
+
     logger.info("JWT username :" + username);
     logger.info("JWT password :" + password);
 
     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, password);
-
-
     return this.authenticationManager.authenticate(authToken);
   }
 
@@ -67,7 +78,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         .setSubject(user.getUsername())
         .signWith(SECRET_KEY)
         .setIssuedAt(new Date())
-        .setExpiration(new Date(System.currentTimeMillis() + 4*milisecondPerHour))
+        .setExpiration(new Date(System.currentTimeMillis() + 4 * milisecondPerHour))
         .compact();
 
     response.addHeader("Authorization", String.format("Bearer %s", token));
