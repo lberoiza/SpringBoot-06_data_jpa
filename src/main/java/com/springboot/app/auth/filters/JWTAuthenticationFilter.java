@@ -1,6 +1,7 @@
 package com.springboot.app.auth.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -18,6 +19,7 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import javax.crypto.SecretKey;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -53,11 +55,19 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
+    ObjectMapper jsonParser = new ObjectMapper();
     User user = (User) authResult.getPrincipal();
 
+    Claims claims = Jwts.claims();
+    claims.put("authorities", jsonParser.writeValueAsString(user.getAuthorities()));
+    long milisecondPerHour = 3600000L;
+
     String token = Jwts.builder()
+        .setClaims(claims)
         .setSubject(user.getUsername())
         .signWith(SECRET_KEY)
+        .setIssuedAt(new Date())
+        .setExpiration(new Date(System.currentTimeMillis() + 4*milisecondPerHour))
         .compact();
 
     response.addHeader("Authorization", String.format("Bearer %s", token));
@@ -67,7 +77,7 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     body.put("user", user);
     body.put("message", String.format("Hi, %s. You has initialized session successfully", user.getUsername()));
 
-    response.getWriter().write(new ObjectMapper().writeValueAsString(body));
+    response.getWriter().write(jsonParser.writeValueAsString(body));
     response.setStatus(200);
     response.setContentType("application/json");
 
