@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -39,15 +41,19 @@ public class Client implements EntityTable {
   @Column(name = "created_at")
   @Temporal(TemporalType.TIMESTAMP)
   @DateTimeFormat(pattern = "yyyy-MM-dd")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date createdAt;
 
   @Column(name = "updated_at")
   @Temporal(TemporalType.TIMESTAMP)
+  @DateTimeFormat(pattern = "yyyy-MM-dd")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private Date updatedAt;
 
   private String image;
 
   @OneToMany(mappedBy = "client", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
   private List<Invoice> invoices;
 
 
