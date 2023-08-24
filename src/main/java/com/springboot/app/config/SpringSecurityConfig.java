@@ -1,6 +1,7 @@
 package com.springboot.app.config;
 
 import com.springboot.app.auth.filters.JWTAuthenticationFilter;
+import com.springboot.app.auth.filters.JWTAuthorizationFilter;
 import com.springboot.app.auth.handlers.LoginSuccessHandler;
 import com.springboot.app.services.JpaUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,6 +75,7 @@ public class SpringSecurityConfig {
 //                .requestMatchers("/invoice/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated())
         .addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
+        .addFilter(new JWTAuthorizationFilter(authenticationConfiguration.getAuthenticationManager()))
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(httpSecuritySessionManagementConfigurer ->
             httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
