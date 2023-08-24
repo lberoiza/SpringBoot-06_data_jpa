@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
->
 <head>
-<meta charset="UTF-8">
+  <meta charset="UTF-8">
 </head>
 <body>
 
 
-	<ul th:fragment="ErrorBlock" th:if="${#fields.hasErrors('*')}"
-		class="ps-5 alert alert-danger">
-		<li th:each="e: ${#fields.errors('*')}" th:text="${e}"></li>
-	</ul>
+<ul th:fragment="ErrorBlock" th:if="${#fields.hasErrors('*')}"
+    class="ps-5 alert alert-danger">
+  <li th:each="e: ${#fields.errors('*')}" th:text="${e}"></li>
+</ul>
 
 
 </body>
