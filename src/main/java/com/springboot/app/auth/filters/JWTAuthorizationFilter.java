@@ -79,17 +79,6 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
   }
 
-  @Override
-  protected void onUnsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException {
-    Map<String, Object> body = new HashMap<>();
-    body.put("message", "You have no Authorization to see this information");
-    body.put("error", failed.getMessage());
-
-    response.getWriter().write(this.jsonParser.writeValueAsString(body));
-    response.setStatus(403);
-    response.setContentType("application/json");
-  }
-
   protected boolean requiresAuthentication(String header) {
     return header != null && header.startsWith("Bearer ");
   }
