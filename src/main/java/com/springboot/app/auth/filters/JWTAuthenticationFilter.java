@@ -64,11 +64,11 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
 
     String token = this.jwtService.create(authResult);
-    response.addHeader("Authorization", String.format("Bearer %s", token));
+    response.addHeader(JWTService.HEADER_AUTHORIZATION, JWTService.HEADER_TOKEN_PREFIX + token);
 
     Map<String, Object> body = new HashMap<>();
-    body.put("token", token);
-    body.put("user", authResult.getName());
+    body.put(JWTService.RESPONSE_KEY_TOKEN, token);
+    body.put(JWTService.RESPONSE_KEY_USER, authResult.getName());
     body.put("message", String.format("Hi, %s. You has initialized session successfully", authResult.getName()));
 
     response.getWriter().write(this.jsonParser.writeValueAsString(body));

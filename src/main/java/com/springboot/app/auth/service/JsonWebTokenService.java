@@ -68,7 +68,7 @@ public class JsonWebTokenService implements JWTService {
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities(String jwtToken) throws java.io.IOException {
-    Object rolesJson = getClaims(jwtToken).get("authorities");
+    Object rolesJson = getClaims(jwtToken).get(RESPONSE_KEY_AUTHORITIES);
     return Arrays.asList(
         jsonParser.
             addMixIn(SimpleGrantedAuthority.class, SimpleGrantedAuthorityMixin.class)
@@ -78,11 +78,11 @@ public class JsonWebTokenService implements JWTService {
 
   @Override
   public String getJwtTokenFromRequest(HttpServletRequest request) throws IllegalArgumentException {
-    String header = request.getHeader("Authorization");
-    if (header == null || !header.startsWith("Bearer ")) {
+    String header = request.getHeader(HEADER_AUTHORIZATION);
+    if (header == null || !header.startsWith(HEADER_TOKEN_PREFIX)) {
       throw new IllegalArgumentException("Token not found or invalid");
     }
-    return header.replace("Bearer ", "");
+    return header.replace(HEADER_TOKEN_PREFIX, "");
   }
 
 
