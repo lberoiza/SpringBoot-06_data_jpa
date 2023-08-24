@@ -3,6 +3,7 @@ package com.springboot.app.config;
 import com.springboot.app.auth.filters.JWTAuthenticationFilter;
 import com.springboot.app.auth.filters.JWTAuthorizationFilter;
 import com.springboot.app.auth.handlers.LoginSuccessHandler;
+import com.springboot.app.auth.service.JWTService;
 import com.springboot.app.services.JpaUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -36,20 +37,22 @@ public class SpringSecurityConfig {
   private final LoginSuccessHandler loginSuccessHandler;
   private final BCryptPasswordEncoder passwordEncoder;
   private final JpaUserDetailsService userDetailsService;
-
   private final AuthenticationConfiguration authenticationConfiguration;
+  private final JWTService jwtService;
 
   @Autowired
   public SpringSecurityConfig(
       LoginSuccessHandler loginSuccessHandler,
       BCryptPasswordEncoder passwordEncoder,
       JpaUserDetailsService userDetailsService,
-      AuthenticationConfiguration authenticationConfiguration
+      AuthenticationConfiguration authenticationConfiguration,
+      JWTService jwtService
   ) {
     this.loginSuccessHandler = loginSuccessHandler;
     this.passwordEncoder = passwordEncoder;
     this.userDetailsService = userDetailsService;
     this.authenticationConfiguration = authenticationConfiguration;
+    this.jwtService = jwtService;
   }
 
   @Autowired
@@ -74,8 +77,8 @@ public class SpringSecurityConfig {
 //                .requestMatchers("/client/**").hasAnyRole("ADMIN")
 //                .requestMatchers("/invoice/**").hasAnyRole("ADMIN")
                 .anyRequest().authenticated())
-        .addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager()))
-        .addFilter(new JWTAuthorizationFilter(authenticationConfiguration.getAuthenticationManager()))
+        .addFilter(new JWTAuthenticationFilter(authenticationConfiguration.getAuthenticationManager(), jwtService))
+        .addFilter(new JWTAuthorizationFilter(authenticationConfiguration.getAuthenticationManager(), jwtService))
         .csrf(AbstractHttpConfigurer::disable)
         .sessionManagement(httpSecuritySessionManagementConfigurer ->
             httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS)

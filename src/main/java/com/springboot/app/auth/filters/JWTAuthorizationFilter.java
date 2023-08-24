@@ -1,34 +1,24 @@
 package com.springboot.app.auth.filters;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.springboot.app.auth.SimpleGrantedAuthorityMixin;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.JwtException;
-import io.jsonwebtoken.Jwts;
+import com.springboot.app.auth.service.JWTService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
 
 public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
 
-  private final ObjectMapper jsonParser;
+  private final JWTService jwtService;
 
-
-
-  public JWTAuthorizationFilter(AuthenticationManager authenticationManager) {
+  public JWTAuthorizationFilter(AuthenticationManager authenticationManager, JWTService jwtService) {
     super(authenticationManager);
-    this.jsonParser = new ObjectMapper();
+    this.jwtService = jwtService;
   }
 
 
@@ -43,31 +33,14 @@ public class JWTAuthorizationFilter extends BasicAuthenticationFilter {
       return;
     }
 
+    String jwtToken = this.jwtService.getJwtTokenFromRequest(request);
 
-    boolean isTokenValid = false;
-    Claims claims = null;
-    try {
-      claims = Jwts.parserBuilder()
-          .setSigningKey(JWTAuthenticationFilter.SECRET_KEY)
-          .build()
-          .parseClaimsJws(header.replace("Bearer ", "")).getBody();
-      isTokenValid = true;
-    } catch (JwtException | IllegalArgumentException e) {
-      logger.error(e.toString());
-    }
 
     UsernamePasswordAuthenticationToken authentication = null;
-    if(isTokenValid && claims != null) {
+    if(this.jwtService.validate(jwtToken)) {
       logger.info("Token valid");
-      String username = claims.getSubject();
-      Object rolesJson = claims.get("authorities");
-
-      Collection<? extends GrantedAuthority> authorities = Arrays.asList(
-          jsonParser.
-              addMixIn(SimpleGrantedAuthority.class, SimpleGrantedAuthorityMixin.class)
-              .readValue(rolesJson.toString(), SimpleGrantedAuthority[].class)
-      );
-      authentication = new UsernamePasswordAuthenticationToken(username, null, authorities);
+      String username = this.jwtService.getUsername(jwtToken);
+      authentication = new UsernamePasswordAuthenticationToken(username, null, this.jwtService.getAuthorities(jwtToken));
     }
 
     // Registra en el contexto de seguridad la autenticacion para este request
