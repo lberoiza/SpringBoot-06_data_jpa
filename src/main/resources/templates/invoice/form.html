@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head th:replace="~{/layouts/main :: head}"></head>
+<head th:replace="~{layouts/main :: head}"></head>
 <body>
 
-<header th:replace="~{/layouts/main :: header}"></header>
+<header th:replace="~{layouts/main :: header}"></header>
 
 <div class="container py-4">
   <div class="card bg-light">
@@ -16,7 +16,7 @@
       </h4>
 
 
-      <div th:insert="~{/components/error_block :: ErrorBlock}"
+      <div th:insert="~{components/error_block :: ErrorBlock}"
            th:object="${invoice}" th:remove="tag"></div>
       <form id="form-new-invoice" th:action="@{/invoice/form}" th:object="${invoice}"
             method="POST" enctype="multipart/form-data">
@@ -119,7 +119,7 @@
 </div>
 
 
-<footer th:replace="~{/layouts/main :: footer}"></footer>
+<footer th:replace="~{layouts/main :: footer}"></footer>
 <script th:src="@{/application/js/invoice/form.js}"></script>
 <script th:src="@{/application/js/utils/Debounce.js}"></script>
 <script lang="js">

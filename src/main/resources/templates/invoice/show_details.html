@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html xmlns:th="https://www.thymeleaf.org">
-<head th:replace="~{/layouts/main :: head}">
+<head th:replace="~{layouts/main :: head}">
 </head>
 <body>
 
-<header th:replace="~{/layouts/main :: header}"></header>
+<header th:replace="~{layouts/main :: header}"></header>
 
 <div class="container py-4">
   <div class="card bg-light">
@@ -156,6 +156,6 @@
 
 <span id="invoice-deletion-confirm" th:text="#{text.client.invoice.deleteConfirmation}" class="d-none"></span>
 
-<footer th:replace="~{/layouts/main :: footer}"></footer>
+<footer th:replace="~{layouts/main :: footer}"></footer>
 </body>
 </html>
