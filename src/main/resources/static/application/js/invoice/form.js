@@ -1,7 +1,6 @@
 class InvoiceForm {
 
-  FETCH_URL_PRODUCT_LIST_BY_NAME = "/product/find_by_name/";
-
+  URL_PRODUCT_LIST_BY_NAME_ID = "ajaxUrlProductList";
   FORM_INVOICE_ID = "form-new-invoice";
   INPUT_PRODUCT_ID = "product";
   DATALIST_PRODUCT_ID = "datalist-product";
@@ -19,7 +18,7 @@ class InvoiceForm {
     this.debounce = new Debounce(500, () => this.getProducts());
     this.initializeComponents();
     this.initializeListeners()
-
+    this.ajaxUrlProdutcList = document.getElementById(this.URL_PRODUCT_LIST_BY_NAME_ID).value;
   }
 
   initializeComponents() {
@@ -61,7 +60,7 @@ class InvoiceForm {
   getProducts() {
     let productSearchTerm = this.getProductSearchTerm();
     if (this.productInputHasChanged()) {
-      fetch(this.FETCH_URL_PRODUCT_LIST_BY_NAME + productSearchTerm)
+      fetch(this.ajaxUrlProdutcList + productSearchTerm)
         .then(res => res.json())
         .then(result => this.loadDatalistProduct(result));
     }
