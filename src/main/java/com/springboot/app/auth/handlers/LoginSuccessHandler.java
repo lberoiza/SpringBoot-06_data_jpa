@@ -1,6 +1,5 @@
 package com.springboot.app.auth.handlers;
 
-import com.springboot.app.controllers.MainControler;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,7 +46,7 @@ public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     flashMapManager.saveOutputFlashMap(flashMap, request, response);
 
 //    super.setDefaultTargetUrl("/client/list");
-    response.sendRedirect(MainControler.START_POINT);
+//    response.sendRedirect(MainControler.START_POINT);
     super.onAuthenticationSuccess(request, response, authentication);
 
   }

@@ -118,7 +118,7 @@
   </template>
 </div>
 
-
+<input type="hidden" id="ajaxUrlProductList" th:value="@{/product/find_by_name/}">
 <footer th:replace="~{layouts/main :: footer}"></footer>
 <script th:src="@{/application/js/invoice/form.js}"></script>
 <script th:src="@{/application/js/utils/Debounce.js}"></script>

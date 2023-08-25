@@ -17,7 +17,11 @@ import com.springboot.app.models.entity.Client;
 public class ClientService extends BaseCRUDService<Client, IClientDaoRepository> {
 
   public Optional<Client> fetchClientByIdWithInvoices(Long id) {
-    return Optional.of(this.repository.fetchClientByIdWithInvoices(id));
+    Client client = this.repository.fetchClientByIdWithInvoices(id);
+    if(client == null) {
+      return Optional.empty();
+    }
+    return Optional.of(client);
   }
 
 
