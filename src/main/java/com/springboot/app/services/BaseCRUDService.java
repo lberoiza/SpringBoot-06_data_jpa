@@ -1,6 +1,5 @@
 package com.springboot.app.services;
 
-import com.springboot.app.models.entity.Client;
 import com.springboot.app.models.entity.EntityTable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

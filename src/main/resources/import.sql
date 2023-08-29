@@ -20,6 +20,12 @@ INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VA
 INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VALUES (4, 'Lucia', 'Mora', 'rubia@email.com','2023-05-26', '2023-05-26', '');
 INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VALUES (5, 'Lili', 'Fernandez', 'lili.fer@email.com', '2023-05-26', '2023-05-26', '');
 INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VALUES (6, 'Elisabeth', 'Smith', 'es-gbr@email.com', '2023-05-26', '2023-05-26', '');
+INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VALUES (7, 'Marta', 'Sanchez', 'ma-sa@email.com', '2023-05-26', '2023-05-26', '');
+INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VALUES (8, 'Linus', 'Torvals', 'ltorvals@email.com', '2023-05-26', '2023-05-26', '');
+INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VALUES (9, 'Carlo', 'Magno', 'cm@email.com', '1000-05-26', '2023-05-26', '');
+INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VALUES (10, 'Jackie', 'Chan', 'jack-chan@email.com', '2023-05-26', '2023-05-26', '');
+INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VALUES (11, 'David', 'Copperfield', 'magician@email.com', '2023-05-26', '2023-05-26', '');
+INSERT INTO clients (id, name, surname, email, created_at, updated_at, image) VALUES (12, 'Samantha', 'Johansson', 'sam-jo@email.com', '2023-05-26', '2023-05-26', '');
 
 -- Genera el ID autoincremental a partir del id maximo de la tabla
 -- ALTER TABLE clients ALTER COLUMN id RESTART WITH (SELECT MAX(id) + 1 FROM clients);
